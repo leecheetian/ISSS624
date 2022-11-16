@@ -1,0 +1,14 @@
+{
+  "hash": "fb0849f6219f33866206b78eded3eff9",
+  "result": {
+    "markdown": "---\ntitle: \"ISSS624\"\n---\n\n\nWelcome to Lee Chee Tian's website.\n\nHere are Chee Tian's work for the ISSS624 Geospatial Analytics module.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
