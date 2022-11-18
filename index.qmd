@@ -2,6 +2,10 @@
 title: "ISSS624"
 ---
 
-Welcome to Lee Chee Tian's website.
+Welcome to Lee Chee Tian's ISSS624 website.
 
-Here are Chee Tian's work for the ISSS624 Geospatial Analytics module.
+Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
+
+1.  Hands-on Exercises
+
+    1.  [Hands-on Exercise 1](hands-on_ex1.qmd)
