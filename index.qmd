@@ -8,4 +8,4 @@ Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
 
 1.  Hands-on Exercises
 
-    1.  [Hands-on Exercise 1](hands-on_ex1.qmd)
+    i)  [Hands-on Exercise 1](hands-on_ex1.qmd)
