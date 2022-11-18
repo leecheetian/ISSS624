@@ -8,11 +8,11 @@ editor: visual
 
 ## 1.2 Data Acquisition
 
-### 1.2.1 Extracting the geospatial data sets
+#### 1.2.1 Extracting the geospatial data sets
 
 #### ![](Hands-on_Ex1/geospatial_screen.jpg)
 
-1.2.2 Extracting the aspatial data set
+#### 1.2.2 Extracting the aspatial data set
 
 ![](Hands-on_Ex1/aspatial_screen.jpg)
 
@@ -30,21 +30,21 @@ for (p in packages) {
 
 ## 1.4 Importing Geospatial Data
 
-### 1.4.1 Importing polygon feature data in shapefile format
+#### 1.4.1 Importing polygon feature data in shapefile format
 
 ```{r}
 mpsz = st_read(dsn = "Hands-on_Ex1/data/geospatial", 
                   layer = "MP14_SUBZONE_WEB_PL")
 ```
 
-### 1.4.2 Importing polyline feature data in shapefile form
+#### 1.4.2 Importing polyline feature data in shapefile form
 
 ```{r}
 cyclingpath = st_read(dsn = "Hands-on_Ex1/data/geospatial", 
                          layer = "CyclingPath")
 ```
 
-### 1.4.3 Importing GIS data in kml format
+#### 1.4.3 Importing GIS data in kml format
 
 ```{r}
 preschool = st_read("Hands-on_Ex1/data/geospatial/pre-schools-location-kml.kml")
@@ -52,19 +52,19 @@ preschool = st_read("Hands-on_Ex1/data/geospatial/pre-schools-location-kml.kml")
 
 ## 1.5 Checking the Content of A Simple Feature Data Frame
 
-### 1.5.1 Working with *st_geometry()*
+#### 1.5.1 Working with *st_geometry()*
 
 ```{r}
 st_geometry(mpsz)
 ```
 
-### 1.5.2 Working with *glimpse()*
+#### 1.5.2 Working with *glimpse()*
 
 ```{r}
 glimpse(mpsz)
 ```
 
-### 1.5.3 Working with *head()*
+#### 1.5.3 Working with *head()*
 
 ```{r}
 head(mpsz, n=5)
@@ -86,7 +86,7 @@ plot(mpsz["PLN_AREA_N"])
 
 ## 1.7 Working with Projection
 
-### 1.7.1 Assigning EPSG code to a simple feature data frame
+#### 1.7.1 Assigning EPSG code to a simple feature data frame
 
 ```{r}
 st_crs(mpsz)
@@ -112,7 +112,7 @@ preschool3414
 
 ## 1.8 Importing and Converting An Aspatial Data
 
-### 1.8.1 Importing the aspatial data
+#### 1.8.1 Importing the aspatial data
 
 ```{r}
 listings <- read_csv("Hands-on_Ex1/data/aspatial/listings.csv")
@@ -122,7 +122,7 @@ listings <- read_csv("Hands-on_Ex1/data/aspatial/listings.csv")
 list(listings)
 ```
 
-### 1.8.2 Creating a simple feature data frame from an aspatial data frame
+#### 1.8.2 Creating a simple feature data frame from an aspatial data frame
 
 ```{r}
 listings_sf <- st_as_sf(listings, 
@@ -137,7 +137,7 @@ glimpse(listings_sf)
 
 ## 1.9 Geoprocessing with sf package
 
-### 1.9.1 Buffering
+#### 1.9.1 Buffering
 
 ```{r}
 buffer_cycling <- st_buffer(cyclingpath, 
@@ -152,7 +152,7 @@ buffer_cycling$AREA <- st_area(buffer_cycling)
 sum(buffer_cycling$AREA)
 ```
 
-### 1.9.2 Point-in-polygon count
+#### 1.9.2 Point-in-polygon count
 
 ```{r}
 mpsz3414$`PreSch Count`<- lengths(st_intersects(mpsz3414, preschool3414))
