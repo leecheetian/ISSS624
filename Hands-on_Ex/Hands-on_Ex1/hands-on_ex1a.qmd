@@ -10,11 +10,11 @@ editor: visual
 
 #### 1.2.1 Extracting the geospatial data sets
 
-#### ![](Hands-on_Ex1/geospatial_screen.jpg)
+#### ![](geospatial_screen.jpg)
 
 #### 1.2.2 Extracting the aspatial data set
 
-![](Hands-on_Ex1/aspatial_screen.jpg)
+![](aspatial_screen.jpg)
 
 ## 1.3 Getting Started
 
@@ -33,21 +33,21 @@ for (p in packages) {
 #### 1.4.1 Importing polygon feature data in shapefile format
 
 ```{r}
-mpsz = st_read(dsn = "Hands-on_Ex1/data/geospatial", 
+mpsz = st_read(dsn = "data/geospatial", 
                   layer = "MP14_SUBZONE_WEB_PL")
 ```
 
 #### 1.4.2 Importing polyline feature data in shapefile form
 
 ```{r}
-cyclingpath = st_read(dsn = "Hands-on_Ex1/data/geospatial", 
+cyclingpath = st_read(dsn = "data/geospatial", 
                          layer = "CyclingPath")
 ```
 
 #### 1.4.3 Importing GIS data in kml format
 
 ```{r}
-preschool = st_read("Hands-on_Ex1/data/geospatial/pre-schools-location-kml.kml")
+preschool = st_read("data/geospatial/pre-schools-location-kml.kml")
 ```
 
 ## 1.5 Checking the Content of A Simple Feature Data Frame
@@ -115,7 +115,7 @@ preschool3414
 #### 1.8.1 Importing the aspatial data
 
 ```{r}
-listings <- read_csv("Hands-on_Ex1/data/aspatial/listings.csv")
+listings <- read_csv("data/aspatial/listings.csv")
 ```
 
 ```{r}
