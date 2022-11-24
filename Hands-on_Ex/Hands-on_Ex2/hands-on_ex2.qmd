@@ -98,11 +98,8 @@ moran.test(hunan$GDPPC,
            na.action = na.omit)
 ```
 
-<<<<<<< HEAD
 The positive Moran I value of 0.3007 and low p-value of \< 0.05 suggest that there is clustering and positive spatial autocorrelation of GDPPC among the counties, and the null hypothesis of spatial randomness is rejected.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 #### Computing Monte Carlo Moran's I
 
 ```{r}
@@ -115,11 +112,8 @@ bperm = moran.mc(hunan$GDPPC,
 bperm
 ```
 
-<<<<<<< HEAD
 The positive Moran I and low p-value of 0.001 after 1000 simulations affirm the clustering and positive spatial autocorrelation that's present in the various counties' GDPPC.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 #### Visualizing Monte Carlo Moran's I
 
 ```{r}
@@ -143,11 +137,8 @@ abline(v = 0,
        col = "red") 
 ```
 
-<<<<<<< HEAD
 The above summary and histogram show that in order for the null hypothesis (spatial randomness) to stand, the Moran I should be close to the median value of -0.02125. Our obtained Moran I value of 0.3007 lies way outside the confidence interval of the histogram, and thus the null hypothesis can be rejected.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 ```{r}
 ggplot(data = data.frame(bperm$res),
        aes(x = bperm$res)) +
@@ -168,11 +159,8 @@ ggplot(data = data.frame(bperm$res),
 geary.test(hunan$GDPPC, listw = rswm_q)
 ```
 
-<<<<<<< HEAD
 The Geary C value of 0.6907 is less than 1, thus suggesting that clustering and spatial autocorrelation of GDPPC exist. The low p-value that is \< 0.05 means that the null hypothesis of spatial randomness can be rejected.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 #### Computing Monte Carlo Geary's C
 
 ```{r}
@@ -181,11 +169,8 @@ bperm = geary.mc(hunan$GDPPC, listw = rswm_q, nsim = 999)
 bperm
 ```
 
-<<<<<<< HEAD
 The \< 1 value of Geary C and low p-value of 0.001 after 1000 simulations affirm the clustering and positive spatial autocorrelation that's present in the various counties' GDPPC.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 #### Visualising the Monte Carlo Geary's C
 
 ```{r}
@@ -205,11 +190,8 @@ hist(bperm$res, freq = TRUE, breaks = 20, xlab = "Simulated Geary c")
 abline(v = 1, col = "red") 
 ```
 
-<<<<<<< HEAD
 The above summary and histogram show that in order for the null hypothesis (spatial randomness) to stand, the Geary C should be close to the median value of 1.0052. Our obtained Geary C value of 0.6907 lies below the confidence interval of the histogram, and thus the null hypothesis can be rejected.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 ## Spatial Correlogram
 
 ### Compute Moran's I correlogram
@@ -227,11 +209,8 @@ plot(MI_corr)
 print(MI_corr)
 ```
 
-<<<<<<< HEAD
 The plot above shows that there exists positive spatial autocorrelation in GDPPC among counties with spatial lag order of 1 and 2, and negative spatial autocorrelation among counties with lag order of 5 and 6, with high significance level (low p-value). At lag order of 3 and 4, the GDPPC appears more random with low spatial autocorrelation (Moran I approaching 0 and p-value \>= 0.05).
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 ### Compute Geary's C correlogram and plot
 
 ```{r}
@@ -247,11 +226,8 @@ plot(GC_corr)
 print(GC_corr)
 ```
 
-<<<<<<< HEAD
 The plot above shows that there exists positive spatial autocorrelation in GDPPC among counties with spatial lag order of 1 and 2, and negative spatial autocorrelation among counties with lag order of 5, with high significance level (low p-value). At lag order of 3, 4 and 6, the GDPPC appears more random with low spatial autocorrelation (Geary C approaching 1 and p-value \>= 0.05).
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 ## Cluster and Outlier Analysis
 
 ### Computing local Moran's I
@@ -417,11 +393,8 @@ LISAmap <- tm_shape(hunan.localMI) +
 tmap_arrange(gdppc, LISAmap, asp = 1, ncol = 2)
 ```
 
-<<<<<<< HEAD
 The LISA maps above help to identify the counties where there exist significant spatial autocorrelation and association in the GDPPC values with their neighbours, which form spatial clusters and outliers on the maps, thereby identifying the hot spot and cold spot areas.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 ## Hot Spot and Cold Spot Area Analysis
 
 ### Getis and Ord's G-Statistics
@@ -505,11 +478,8 @@ Gimap <-tm_shape(hunan.gi) +
 tmap_arrange(gdppc, Gimap, asp = 1, ncol = 2)
 ```
 
-<<<<<<< HEAD
 The Gi map above shows the hot spots which are formed by clustering of counties that have high GDPPC and have significant spatial association with neighbours that have high GDPPC too, and cold spots formed by clustering of counties that have low GDPPC and have significant spatial association with neighbours that have low GDPPC as well. The rest do not show significant spatial association for their GDPPC values with their neighbours.
 
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 ### Gi statistics using adaptive distance
 
 ```{r}
@@ -537,7 +507,4 @@ tmap_arrange(gdppc,
              ncol = 2)
 ```
 
-<<<<<<< HEAD
 The Gi map above shows the hot spots and cold spots as defined earlier, but using a different distance weighting scheme - adaptive distance weighting - this time. The identified hot spots and cold spots differ from the earlier map as a result.
-=======
->>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
