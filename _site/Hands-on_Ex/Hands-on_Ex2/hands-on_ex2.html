@@ -436,7 +436,10 @@ Moran I statistic       Expectation          Variance
       0.300749970      -0.011494253       0.004348351 </code></pre>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The positive Moran I value of 0.3007 and low p-value of &lt; 0.05 suggest that there is clustering and positive spatial autocorrelation of GDPPC among the counties, and the null hypothesis of spatial randomness is rejected.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 <section id="computing-monte-carlo-morans-i" class="level4">
 <h4 class="anchored" data-anchor-id="computing-monte-carlo-morans-i">Computing Monte Carlo Moran’s I</h4>
@@ -460,7 +463,10 @@ statistic = 0.30075, observed rank = 1000, p-value = 0.001
 alternative hypothesis: greater</code></pre>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The positive Moran I and low p-value of 0.001 after 1000 simulations affirm the clustering and positive spatial autocorrelation that’s present in the various counties’ GDPPC.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 <section id="visualizing-monte-carlo-morans-i" class="level4">
 <h4 class="anchored" data-anchor-id="visualizing-monte-carlo-morans-i">Visualizing Monte Carlo Moran’s I</h4>
@@ -494,7 +500,10 @@ alternative hypothesis: greater</code></pre>
 <p><img src="hands-on_ex2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The above summary and histogram show that in order for the null hypothesis (spatial randomness) to stand, the Moran I should be close to the median value of -0.02125. Our obtained Moran I value of 0.3007 lies way outside the confidence interval of the histogram, and thus the null hypothesis can be rejected.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(bperm<span class="sc">$</span>res),</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> bperm<span class="sc">$</span>res)) <span class="sc">+</span></span>
@@ -531,7 +540,10 @@ Geary C statistic       Expectation          Variance
         0.6907223         1.0000000         0.0073364 </code></pre>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The Geary C value of 0.6907 is less than 1, thus suggesting that clustering and spatial autocorrelation of GDPPC exist. The low p-value that is &lt; 0.05 means that the null hypothesis of spatial randomness can be rejected.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 <section id="computing-monte-carlo-gearys-c" class="level4">
 <h4 class="anchored" data-anchor-id="computing-monte-carlo-gearys-c">Computing Monte Carlo Geary’s C</h4>
@@ -551,7 +563,10 @@ statistic = 0.69072, observed rank = 1, p-value = 0.001
 alternative hypothesis: greater</code></pre>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The &lt; 1 value of Geary C and low p-value of 0.001 after 1000 simulations affirm the clustering and positive spatial autocorrelation that’s present in the various counties’ GDPPC.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 <section id="visualising-the-monte-carlo-gearys-c" class="level4">
 <h4 class="anchored" data-anchor-id="visualising-the-monte-carlo-gearys-c">Visualising the Monte Carlo Geary’s C</h4>
@@ -581,7 +596,10 @@ alternative hypothesis: greater</code></pre>
 <p><img src="hands-on_ex2_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The above summary and histogram show that in order for the null hypothesis (spatial randomness) to stand, the Geary C should be close to the median value of 1.0052. Our obtained Geary C value of 0.6907 lies below the confidence interval of the histogram, and thus the null hypothesis can be rejected.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 </section>
 </section>
@@ -616,7 +634,10 @@ method: Moran's I
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The plot above shows that there exists positive spatial autocorrelation in GDPPC among counties with spatial lag order of 1 and 2, and negative spatial autocorrelation among counties with lag order of 5 and 6, with high significance level (low p-value). At lag order of 3 and 4, the GDPPC appears more random with low spatial autocorrelation (Moran I approaching 0 and p-value &gt;= 0.05).</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 <section id="compute-gearys-c-correlogram-and-plot" class="level3">
 <h3 class="anchored" data-anchor-id="compute-gearys-c-correlogram-and-plot">Compute Geary’s C correlogram and plot</h3>
@@ -647,7 +668,10 @@ method: Geary's C
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The plot above shows that there exists positive spatial autocorrelation in GDPPC among counties with spatial lag order of 1 and 2, and negative spatial autocorrelation among counties with lag order of 5, with high significance level (low p-value). At lag order of 3, 4 and 6, the GDPPC appears more random with low spatial autocorrelation (Geary C approaching 1 and p-value &gt;= 0.05).</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 </section>
 <section id="cluster-and-outlier-analysis" class="level2">
@@ -933,7 +957,10 @@ Zixing        -7.6849e-01 -8.8210e-02  9.4057e-01 -7.0144e-01         0.4830</co
 <p><img src="hands-on_ex2_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The LISA maps above help to identify the counties where there exist significant spatial autocorrelation and association in the GDPPC values with their neighbours, which form spatial clusters and outliers on the maps, thereby identifying the hot spot and cold spot areas.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 </section>
 <section id="hot-spot-and-cold-spot-area-analysis" class="level2">
@@ -1118,7 +1145,10 @@ attr(,"class")
 <p><img src="hands-on_ex2_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The Gi map above shows the hot spots which are formed by clustering of counties that have high GDPPC and have significant spatial association with neighbours that have high GDPPC too, and cold spots formed by clustering of counties that have low GDPPC and have significant spatial association with neighbours that have low GDPPC as well. The rest do not show significant spatial association for their GDPPC values with their neighbours.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 </section>
 <section id="gi-statistics-using-adaptive-distance" class="level3">
 <h3 class="anchored" data-anchor-id="gi-statistics-using-adaptive-distance">Gi statistics using adaptive distance</h3>
@@ -1152,7 +1182,10 @@ attr(,"class")
 <p><img src="hands-on_ex2_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<<<<<<< HEAD
 <p>The Gi map above shows the hot spots and cold spots as defined earlier, but using a different distance weighting scheme - adaptive distance weighting - this time. The identified hot spots and cold spots differ from the earlier map as a result.</p>
+=======
+>>>>>>> 78631d3c68047171c17156036c0c4506cc3b13cb
 
 
 </section>
