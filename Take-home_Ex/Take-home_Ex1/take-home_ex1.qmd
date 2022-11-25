@@ -24,6 +24,8 @@ pacman::p_load(sf, spdep, tmap, tidyverse)
 
 ![](nigeria%20aspatial%20data.jpg)
 
+As the size of the CSV file has exceeded the GitHub limitation of 100 MB, it shall not be included in the Commit and Push to GitHub and Netlify. The wrangled data derived from the following steps for the subsequent geospatial analysis will be exported as a RDS file, and this will be pushed to GitHub and Netlify instead.
+
 ### Importing shapefile and Transforming to EPSG 26391 Map Projection
 
 ```{r}
