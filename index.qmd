@@ -15,3 +15,7 @@ Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
 2.  In-class Exercises
 
     i.  [In-class Exercise 1](In-class_Ex/In-class_Ex1/in-class_ex1.qmd)
+
+3.  Take-home Exercises
+
+    i.  [Take-home Exercise 1](Take-home_Ex/Take-home_Ex1/take-home_ex1.qmd)
