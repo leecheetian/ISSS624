@@ -336,8 +336,8 @@ signif <- 0.05
 
 ```{r}
 quadrant[DV >0 & C_mI>0] <- 4      
-quadrant[DV <0 & C_mI<0] <- 1      
-quadrant[DV <0 & C_mI>0] <- 2
+quadrant[DV <0 & C_mI<0] <- 2      
+quadrant[DV <0 & C_mI>0] <- 1
 quadrant[DV >0 & C_mI<0] <- 3
 ```
 
@@ -346,13 +346,13 @@ quadrant[localMI[,5]>signif] <- 0
 ```
 
 ```{r}
-quadrant <- vector(mode = "numeric", length = nrow(localMI))
+quadrant <- vector(mode="numeric",length=nrow(localMI))
 DV <- hunan$GDPPC - mean(hunan$GDPPC)     
 C_mI <- localMI[,1] - mean(localMI[,1])    
 signif <- 0.05       
 quadrant[DV >0 & C_mI>0] <- 4      
-quadrant[DV <0 & C_mI<0] <- 1      
-quadrant[DV <0 & C_mI>0] <- 2
+quadrant[DV <0 & C_mI<0] <- 2      
+quadrant[DV <0 & C_mI>0] <- 1
 quadrant[DV >0 & C_mI<0] <- 3
 quadrant[localMI[,5]>signif] <- 0
 ```

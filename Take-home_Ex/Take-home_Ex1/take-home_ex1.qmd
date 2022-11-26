@@ -128,3 +128,45 @@ tmap_arrange(fmap, nfmap, f2nfmap, ncol=1)
 ```
 
 It appears the functional water points are mostly concentrated in the northern regions of Nigeria, and corresponds to a higher functional-to-non-functional ratio. The central and southern regions see a higher number of non-functional water points and lower functional-to-non-functional ratio in contrast.
+
+## Cluster and Outlier Analysis
+
+### Computing Contiguity Spatial Weights
+
+```{r}
+wm_q <- poly2nb(nigeria_WPdx, queen = TRUE)
+summary(wm_q)
+```
+
+### Row-Standardized Weights Matrix
+
+```{r}
+rswm_q <- nb2listw(wm_q, style = "W", zero.policy = TRUE)
+print(rswm_q, zero.policy = TRUE)
+```
+
+### Global Spatial Autocorrelation: Moran's I test
+
+```{r}
+moran.test(nigeria_WPdx$f2nfrate, 
+           listw = rswm_q, 
+           zero.policy = TRUE, 
+           na.action = na.omit)
+```
+
+The positive Moran's I value of 0.1753 and low p-value of \< 0.05 suggest that there is clustering and positive spatial autocorrelation of the functional-to-non-functional ratio of the water points among the LGAs, and the null hypothesis of spatial randomness is rejected.
+
+### Computing Local Moran's I
+
+```{r}
+fips <- order(nigeria_WPdx$shapeName)
+localMI <- localmoran(nigeria_WPdx$f2nfrate, rswm_q, zero.policy = TRUE,
+                      na.action = na.exclude)
+head(localMI)
+```
+
+```{r}
+printCoefmat(data.frame(localMI[fips,], 
+                        row.names = nigeria_WPdx$shapeName[fips]), 
+             check.names = FALSE)
+```
