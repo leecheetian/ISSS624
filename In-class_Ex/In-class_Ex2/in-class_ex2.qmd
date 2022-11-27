@@ -1,0 +1,161 @@
+---
+title: "In-class Exercise 2"
+author: "Lee Chee Tian"
+editor: visual
+---
+
+## Objective
+
+To reveal the spatial distribution of Functional and Non-functional water points in Nigeria derived from WPdx data using geospatial analytic techniques.
+
+## Getting Started
+
+The code chunk below will install and load tidyverse, sf, spdep, tmap and funModeling packages.
+
+```{r}
+pacman::p_load(sf, tidyverse, spdep, tmap, funModeling)
+```
+
+## Importing Geospatial Data
+
+### Importing Nigeria LGA boundary shapefile
+
+This code chunk will import ESRI shapefile of Nigeria obtained from geoBoundaries into R.
+
+```{r}
+nigeria_sf <- st_read(dsn="data/Nigeria", 
+                      layer="geoBoundaries-NGA-ADM2",
+                      crs = 4326) %>%
+  st_transform(crs = 26391)
+```
+
+### Importing water points csv aspatial data
+
+This code chunk will import the water points data obtained from WPdx into R, filtered by Nigeria only.
+
+```{r}
+nigeria_csv <- read_csv("data/WPdx+/geo_export.csv") %>%
+  filter(`#clean_country_name` == "Nigeria")
+```
+
+This code chunk converts the CSV data into a simple feature data frame with geometry information using the `st_as_sf()` function of the **sf** package.
+
+```{r}
+nigeria_wp_sf <- st_as_sf(nigeria_csv, 
+                          coords = c("#lon_deg", "#lat_deg"),
+                          crs = 4326) %>%
+  st_transform(crs = 26391)
+```
+
+The following code chunk uses the write_rds() method of the readr package to save the extracted data into an output file in rds data format:
+
+```{r}
+wp_nga <- write_rds(nigeria_wp_sf, "data/rds/wp_nga.rds")
+```
+
+```{r}
+wp_nga
+```
+
+## Data Wrangling
+
+### Recoding NA values into string
+
+The code chunk below recodes all NA values in the *#status_clean* column into "Unknown" using the `replace_na()` function.
+
+```{r}
+wp_nga <- read_rds("data/rds/wp_nga.rds") %>%
+  mutate(`#status_clean` = replace_na(`#status_clean`, "Unknown"))
+```
+
+### EDA
+
+The code chunk below uses the `freq()` function of the **funModeling** package to display the distribution of the *#status_clean* column values in *wp_nga* dataset.
+
+```{r}
+freq(data = wp_nga, input = "#status_clean")
+```
+
+## Extracting Water Points Data
+
+### Extracting functional water points
+
+The `filter()` function of the **dplyr** package will be used to select the functional water points from those rows whose *#status_clean* values are "Functional", "Functional but needs repair" and "Functional but not in use".
+
+```{r}
+wpt_functional <- wp_nga %>%
+  filter(`#status_clean` %in% c("Functional", 
+                                "Functional but needs repair",
+                                "Functional but not in use"))
+```
+
+```{r}
+freq(data = wpt_functional, input = "#status_clean")
+```
+
+### Extracting non-functional water points
+
+The `filter()` function of the **dplyr** package will again be used to select the non-functional water points from those rows whose *#status_clean* values are "Non-Functional", "Non-Functional due to dry season", "Abandoned/Decommissioned", "Abandoned" and "Non functional due to dry season".
+
+```{r}
+wpt_nonfunctional <- wp_nga %>%
+  filter(`#status_clean` %in% c("Non-Functional", 
+                                "Non-Functional due to dry season",
+                                "Non functional due to dry season",
+                                "Abandoned/Decommissioned",
+                                "Abandoned"))
+```
+
+```{r}
+freq(data = wpt_nonfunctional, input = "#status_clean")
+```
+
+### Extracting water points with Unknown class
+
+Lastly, the remaining water points with "Unknown" status are grouped using the same `filter()` function.
+
+```{r}
+wpt_unknown <- wp_nga %>%
+  filter(`#status_clean` == "Unknown")
+```
+
+## Performing Point-in-Polygon Count
+
+```{r}
+nga_wp <- nigeria_sf %>% 
+  mutate(`total wpt` = lengths(
+    st_intersects(nigeria_sf, wp_nga))) %>%
+  mutate(`wpt functional` = lengths(
+    st_intersects(nigeria_sf, wpt_functional))) %>%
+  mutate(`wpt non-functional` = lengths(
+    st_intersects(nigeria_sf, wpt_nonfunctional))) %>%
+  mutate(`wpt unknown` = lengths(
+    st_intersects(nigeria_sf, wpt_unknown)))
+```
+
+## Saving the Analytical Data Table
+
+```{r}
+nga_wp <- nga_wp %>%
+  mutate(pct_functional = `wpt functional`/`total wpt`) %>%
+  mutate(`pct_non-functional` = `wpt non-functional`/`total wpt`) 
+nga_wp
+```
+
+The above derived data will be saved as a RDS file for subsequent geospatial analysis of the water points.
+
+```{r}
+write_rds(nga_wp, "data/rds/nga_wp.rds")
+```
+
+## Visualizing the Spatial Distribution of Water Points
+
+```{r}
+nga_wp <- read_rds("data/rds/nga_wp.rds")
+total <- qtm(nga_wp, "total wpt")
+wp_functional <- qtm(nga_wp, "wpt functional")
+wp_nonfunctional <- qtm(nga_wp, "wpt non-functional")
+unknown <- qtm(nga_wp, "wpt unknown")
+
+tmap_arrange(total, wp_functional, wp_nonfunctional, unknown, asp=1, ncol=2)
+```
