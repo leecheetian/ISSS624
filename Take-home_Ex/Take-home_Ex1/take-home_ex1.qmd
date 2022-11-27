@@ -24,11 +24,13 @@ ESRI shapefile data of Nigeria showing Level-2 Administrative (or Local Governme
 
 ![](nigeria%20adm2%20geospatial%20data.jpg)
 
+Water point data in CSV format was obtained from WPdx data repository:
+
 ![](nigeria%20aspatial%20data.jpg)
 
 As the size of the CSV file has exceeded the GitHub limitation of 100 MB, it shall not be included in the Commit and Push to GitHub and Netlify. The wrangled data derived from the following steps for the subsequent geospatial analysis will be exported as a RDS file, and this will be pushed to GitHub and Netlify instead.
 
-### Importing shapefile and Transforming to EPSG 26391 Map Projection
+### Importing Nigeria Shapefile
 
 ```{r}
 nigeria_sf <- st_read(dsn="data/Nigeria", layer="geoBoundaries-NGA-ADM2")
@@ -42,101 +44,135 @@ plot(nigeria_sf)
 glimpse(nigeria_sf)
 ```
 
+#### Transforming to EPSG 26391 Map Projection
+
 ```{r}
 nigeria26391 <- st_transform(nigeria_sf, crs = 26391)
 nigeria26391
 ```
 
-### Importing Aspatial Data
+### Importing Water Points Aspatial Data
 
 ```{r}
-WPdx_csv <- read_csv("data/WPdx+/Water_Point_Data_Exchange_-_Plus__WPdx__.csv")
+nigeria_csv <- read_csv("data/WPdx+/Water_Point_Data_Exchange_-_Plus__WPdx__.csv") %>%
+  filter(`#clean_country_name` == "Nigeria")
 ```
 
-#### Data Wrangling
-
-Retrieving data for Nigeria only and where functional status is known.
+#### Converting to simple feature data frame and transforming to same map projection
 
 ```{r}
-nigeria_data <- WPdx_csv %>%
-  filter(`#country_name` == "Nigeria") %>%
-  drop_na(`#status`) %>%
-  group_by(`#adm2`) %>%
-  mutate(`functionality` = case_when(grepl("^Functional", `#status`) 
-                                     ~ "Functional", 
-                                     TRUE ~ "Non-functional")) %>%
-  count(`functionality`) %>%
-  pivot_wider(names_from = `functionality`, values_from = n) %>%
-  mutate(`f2nfrate` = ifelse(!is.na(`Functional`) & !is.na(`Non-functional`), 
-                             `Functional` / `Non-functional`,
-                              ifelse(!is.na(`Functional`), 
-                                     `Functional`, 0)))
+nigeria_wp_sf <- st_as_sf(nigeria_csv, 
+                          coords = c("#lon_deg", "#lat_deg"),
+                          crs = 4326) %>%
+  st_transform(crs = 26391)
+```
+
+## Data Wrangling
+
+### Recoding NA values into string
+
+Recoding all NA values in *#status_clean* column into "Unknown":
+
+```{r}
+nigeria_wp <- nigeria_wp_sf %>%
+  mutate(`#status_clean` = replace_na(`#status_clean`, "Unknown"))
+```
+
+### EDA
+
+Listing all values in *#status_clean* column:
+
+```{r}
+freq(data = nigeria_wp, input = "#status_clean")
+```
+
+## Extracting Water Points Data
+
+### Extracting functional water points
+
+```{r}
+wp_functional <- nigeria_wp %>%
+  filter(`#status_clean` %in% c("Functional", 
+                                "Functional but needs repair",
+                                "Functional but not in use"))
+```
+
+### Extracting non-functional water points
+
+```{r}
+wp_nonfunctional <- nigeria_wp %>%
+  filter(`#status_clean` %in% c("Non-Functional", 
+                                "Non-Functional due to dry season",
+                                "Non functional due to dry season",
+                                "Abandoned/Decommissioned",
+                                "Abandoned"))
+```
+
+### Extracting water points with Unknown class
+
+```{r}
+wp_unknown <- nigeria_wp %>%
+  filter(`#status_clean` == "Unknown")
+```
+
+## Performing Point-in-Polygon Count
+
+```{r}
+wp_nigeria <- nigeria26391 %>% 
+  mutate(`Total water points` = lengths(
+    st_intersects(nigeria26391, nigeria_wp))) %>%
+  mutate(`Functional status` = lengths(
+    st_intersects(nigeria26391, wp_functional))) %>%
+  mutate(`Non-functional status` = lengths(
+    st_intersects(nigeria26391, wp_nonfunctional))) %>%
+  mutate(`Unknown status` = lengths(
+    st_intersects(nigeria26391, wp_unknown))) %>%
+  mutate(`Functional %` = `Functional status` / `Total water points`) %>%
+  mutate(`Non-functional %` = `Non-functional status` / `Total water points`)
 ```
 
 ```{r}
-nigeria_data
+wp_nigeria
 ```
 
-The following assumptions were taken in the calculation of the Functional-to-Non-functional ratio, *f2nfrate*, of the water points in each Local Government Area (LGA):
+## Saving the Analytical Data Table
 
--   For LGAs with both Functional and Non-functional water point records, the *f2nfrate* is calculated by the count of the former divided by the count of the latter.
-
--   For LGAs with only Functional water point records but no Non-functional water point records, the *f2nfrate* is assigned the count of the Functional water points (ie. assuming the Non-functional water point count is 1), as it is not feasible to divide by 0.
-
--   For LGAs with only Non-functional water point records and no Functional water point records, the *f2nfrate* is assigned as 0.
-
-### Joining the Aspatial Data and the Geospatial Data
+The data derived above is saved as a RDS file for subsequent geospatial analysis of the water points:
 
 ```{r}
-nigeria_WPdx <- left_join(nigeria26391, nigeria_data, 
-                          by = c("shapeName" = "#adm2"))
+write_rds(wp_nigeria, "data/rds/wp_nigeria.rds")
 ```
 
-```{r}
-nigeria_WPdx
-```
+## Visualizing the Spatial Distribution of Water Points
 
 ```{r}
-write_rds(nigeria_WPdx, "data/rds/nigeria_WPdx.rds")
-```
-
-```{r}
-nigeria_WPdx <- read_rds("data/rds/nigeria_WPdx.rds")
-```
-
-```{r}
-nigeria_WPdx
-```
-
-## Plotting Thematic Map of Water Point Data
-
-```{r}
-fmap <- tm_shape(nigeria_WPdx) +
-  tm_polygons("Functional", title = "Functional count", 
-              style = "jenks", palette = "Blues", n = 6, border.alpha = 0.5) +
+#| fig-width: 14
+#| fig-height: 12
+wp_nigeria <- read_rds("data/rds/wp_nigeria.rds")
+total <- qtm(wp_nigeria, "Total water points", fill.palette = "Purples") + 
   tm_layout(legend.outside = TRUE)
-  
-nfmap <- tm_shape(nigeria_WPdx) +
-  tm_polygons("Non-functional", title = "Non-functional count", 
-              style = "jenks", palette = "Oranges", n = 6, border.alpha = 0.5) +
+wp_functional <- qtm(wp_nigeria, "Functional status", fill.palette = "Blues") + 
   tm_layout(legend.outside = TRUE)
+wp_nonfunctional <- qtm(wp_nigeria, "Non-functional status", fill.palette = "Oranges") + 
+  tm_layout(legend.outside = TRUE)
+unknown <- qtm(wp_nigeria, "Unknown status", fill.palette = "Greys") + 
+  tm_layout(legend.outside = TRUE)
+pct_functional <- qtm(wp_nigeria, "Functional %", fill.palette = "Blues") + 
+  tm_layout(legend.outside = TRUE, legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
+pct_nonfunctional <- qtm(wp_nigeria, "Non-functional %", fill.palette = "Oranges") + 
+  tm_layout(legend.outside = TRUE, legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
 
-f2nfmap <- tm_shape(nigeria_WPdx) +
-  tm_polygons("f2nfrate", title = "Functional to Non-functional ratio", 
-              style = "jenks", palette = "Greens", n = 6, border.alpha = 0.5) +
-  tm_layout(legend.outside = TRUE) 
-
-tmap_arrange(fmap, nfmap, f2nfmap, ncol=1)
+tmap_arrange(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, ncol=2)
 ```
 
-It appears the functional water points are mostly concentrated in the northern regions of Nigeria, and corresponds to a higher functional-to-non-functional ratio. The central and southern regions see a higher number of non-functional water points and lower functional-to-non-functional ratio in contrast.
+From the above maps, it appears that the northern regions of Nigeria tend to enjoy both a higher count as well as percentage of functional water points, while the central and southern regions suffer a higher count and percentage of non-functional ones.
 
 ## Cluster and Outlier Analysis
 
 ### Computing Contiguity Spatial Weights
 
 ```{r}
-wm_q <- poly2nb(nigeria_WPdx, queen = TRUE)
+wm_q <- poly2nb(wp_nigeria, queen = TRUE)
 summary(wm_q)
 ```
 
@@ -150,25 +186,25 @@ print(rswm_q, zero.policy = TRUE)
 ### Global Spatial Autocorrelation: Moran's I test
 
 ```{r}
-moran.test(nigeria_WPdx$f2nfrate, 
+moran.test(wp_nigeria$`Functional %`, 
            listw = rswm_q, 
            zero.policy = TRUE, 
            na.action = na.omit)
 ```
 
-The positive Moran's I value of 0.1753 and low p-value of \< 0.05 suggest that there is clustering and positive spatial autocorrelation of the functional-to-non-functional ratio of the water points among the LGAs, and the null hypothesis of spatial randomness is rejected.
+The positive Moran's I value of 0.5546 and low p-value of \< 0.05 suggest that there is clustering and positive spatial autocorrelation of the proportion of functional water points among the LGAs, and the null hypothesis of spatial randomness is rejected.
 
 ### Computing Local Moran's I
 
 ```{r}
-fips <- order(nigeria_WPdx$shapeName)
-localMI <- localmoran(nigeria_WPdx$f2nfrate, rswm_q, zero.policy = TRUE,
+fips <- order(wp_nigeria$shapeName)
+localMI <- localmoran(wp_nigeria$`Functional %`, rswm_q, zero.policy = TRUE,
                       na.action = na.exclude)
 head(localMI)
 ```
 
 ```{r}
 printCoefmat(data.frame(localMI[fips,], 
-                        row.names = nigeria_WPdx$shapeName[fips]), 
+                        row.names = wp_nigeria$shapeName[fips]), 
              check.names = FALSE)
 ```
