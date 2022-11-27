@@ -165,7 +165,7 @@ pct_functional <- qtm(nga_wp, "pct_functional") +
 pct_nonfunctional <- qtm(nga_wp, "pct_non-functional") + 
   tm_layout(legend.outside = TRUE, legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
 
-tmap_arrange(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, asp=1, ncol=2)
+tmap_arrange(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, ncol=2)
 ```
 
 From the above maps, it appears that the northern regions of Nigeria tend to enjoy both a higher count as well as percentage of functional water points, while the central and southern regions suffer a higher count and percentage of non-functional ones.
