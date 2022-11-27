@@ -34,6 +34,7 @@ nigeria_sf <- st_read(dsn="data/Nigeria",
 This code chunk will import the water points data obtained from WPdx into R, filtered by Nigeria only.
 
 ```{r}
+#| eval: false
 nigeria_csv <- read_csv("data/WPdx+/geo_export.csv") %>%
   filter(`#clean_country_name` == "Nigeria")
 ```
@@ -41,6 +42,7 @@ nigeria_csv <- read_csv("data/WPdx+/geo_export.csv") %>%
 This code chunk converts the CSV data into a simple feature data frame with geometry information using the `st_as_sf()` function of the **sf** package.
 
 ```{r}
+#| eval: false
 nigeria_wp_sf <- st_as_sf(nigeria_csv, 
                           coords = c("#lon_deg", "#lat_deg"),
                           crs = 4326) %>%
@@ -50,10 +52,12 @@ nigeria_wp_sf <- st_as_sf(nigeria_csv,
 The following code chunk uses the write_rds() method of the readr package to save the extracted data into an output file in rds data format:
 
 ```{r}
+#| eval: false
 wp_nga <- write_rds(nigeria_wp_sf, "data/rds/wp_nga.rds")
 ```
 
 ```{r}
+#| eval: false
 wp_nga
 ```
 
@@ -64,6 +68,7 @@ wp_nga
 The code chunk below recodes all NA values in the *#status_clean* column into "Unknown" using the `replace_na()` function.
 
 ```{r}
+#| eval: false
 wp_nga <- read_rds("data/rds/wp_nga.rds") %>%
   mutate(`#status_clean` = replace_na(`#status_clean`, "Unknown"))
 ```
@@ -73,6 +78,7 @@ wp_nga <- read_rds("data/rds/wp_nga.rds") %>%
 The code chunk below uses the `freq()` function of the **funModeling** package to display the distribution of the *#status_clean* column values in *wp_nga* dataset.
 
 ```{r}
+#| eval: false
 freq(data = wp_nga, input = "#status_clean")
 ```
 
@@ -83,6 +89,7 @@ freq(data = wp_nga, input = "#status_clean")
 The `filter()` function of the **dplyr** package will be used to select the functional water points from those rows whose *#status_clean* values are "Functional", "Functional but needs repair" and "Functional but not in use".
 
 ```{r}
+#| eval: false
 wpt_functional <- wp_nga %>%
   filter(`#status_clean` %in% c("Functional", 
                                 "Functional but needs repair",
@@ -90,6 +97,7 @@ wpt_functional <- wp_nga %>%
 ```
 
 ```{r}
+#| eval: false
 freq(data = wpt_functional, input = "#status_clean")
 ```
 
@@ -98,6 +106,7 @@ freq(data = wpt_functional, input = "#status_clean")
 The `filter()` function of the **dplyr** package will again be used to select the non-functional water points from those rows whose *#status_clean* values are "Non-Functional", "Non-Functional due to dry season", "Abandoned/Decommissioned", "Abandoned" and "Non functional due to dry season".
 
 ```{r}
+#| eval: false
 wpt_nonfunctional <- wp_nga %>%
   filter(`#status_clean` %in% c("Non-Functional", 
                                 "Non-Functional due to dry season",
@@ -107,6 +116,7 @@ wpt_nonfunctional <- wp_nga %>%
 ```
 
 ```{r}
+#| eval: false
 freq(data = wpt_nonfunctional, input = "#status_clean")
 ```
 
@@ -115,6 +125,7 @@ freq(data = wpt_nonfunctional, input = "#status_clean")
 Lastly, the remaining water points with "Unknown" status are grouped using the same `filter()` function.
 
 ```{r}
+#| eval: false
 wpt_unknown <- wp_nga %>%
   filter(`#status_clean` == "Unknown")
 ```
@@ -122,6 +133,7 @@ wpt_unknown <- wp_nga %>%
 ## Performing Point-in-Polygon Count
 
 ```{r}
+#| eval: false
 nga_wp <- nigeria_sf %>% 
   mutate(`total wpt` = lengths(
     st_intersects(nigeria_sf, wp_nga))) %>%
@@ -136,6 +148,7 @@ nga_wp <- nigeria_sf %>%
 ## Saving the Analytical Data Table
 
 ```{r}
+#| eval: false
 nga_wp <- nga_wp %>%
   mutate(pct_functional = `wpt functional`/`total wpt`) %>%
   mutate(`pct_non-functional` = `wpt non-functional`/`total wpt`) 
@@ -145,12 +158,15 @@ nga_wp
 The above derived data will be saved as a RDS file for subsequent geospatial analysis of the water points.
 
 ```{r}
+#| eval: false
 write_rds(nga_wp, "data/rds/nga_wp.rds")
 ```
 
 ## Visualizing the Spatial Distribution of Water Points
 
 ```{r}
+#| fig-width: 14
+#| fig-height: 12
 nga_wp <- read_rds("data/rds/nga_wp.rds")
 total <- qtm(nga_wp, "total wpt") + 
   tm_layout(legend.outside = TRUE)

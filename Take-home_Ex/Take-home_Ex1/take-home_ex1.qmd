@@ -8,17 +8,19 @@ editor: visual
 
 ## Objective
 
-To reveal the geospatial patterns of Not Functional water points in Nigeria using global and local spatial association techniques.
+To reveal the geospatial patterns of Functional and Non-functional water points in Nigeria using global and local spatial association techniques.
 
 ## Loading R Packages
 
 ```{r}
-pacman::p_load(sf, spdep, tmap, tidyverse)
+pacman::p_load(sf, spdep, tmap, tidyverse, funModeling)
 ```
 
 ## Importing Data into R
 
 ### The Data
+
+ESRI shapefile data of Nigeria showing Level-2 Administrative (or Local Government Area, LGA) boundary was obtained from geoBoundaries:
 
 ![](nigeria%20adm2%20geospatial%20data.jpg)
 

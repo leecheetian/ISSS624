@@ -298,64 +298,20 @@ Geodetic CRS:  WGS 84</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nigeria_csv <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/WPdx+/geo_export.csv"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#clean_country_name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Nigeria"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
-e.g.:
-  dat &lt;- vroom(...)
-  problems(dat)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 406566 Columns: 70
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr (43): #source, #report_date, #status_id, #water_source_clean, #water_sou...
-dbl (23): row_id, #lat_deg, #lon_deg, #install_year, #fecal_coliform_value, ...
-lgl  (4): #rehab_year, #rehabilitator, is_urban, latest_record
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
 </div>
 <p>This code chunk converts the CSV data into a simple feature data frame with geometry information using the <code>st_as_sf()</code> function of the <strong>sf</strong> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>nigeria_wp_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(nigeria_csv, </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"#lon_deg"</span>, <span class="st">"#lat_deg"</span>),</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">26391</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nigeria_wp_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(nigeria_csv, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"#lon_deg"</span>, <span class="st">"#lat_deg"</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">26391</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The following code chunk uses the write_rds() method of the readr package to save the extracted data into an output file in rds data format:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>wp_nga <span class="ot">&lt;-</span> <span class="fu">write_rds</span>(nigeria_wp_sf, <span class="st">"data/rds/wp_nga.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>wp_nga <span class="ot">&lt;-</span> <span class="fu">write_rds</span>(nigeria_wp_sf, <span class="st">"data/rds/wp_nga.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>wp_nga</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 95008 features and 68 fields
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 32536.82 ymin: 33461.24 xmax: 1292096 ymax: 1091052
-Projected CRS: Minna / Nigeria West Belt
-# A tibble: 95,008 × 69
-   row_id `#source`      #repo…¹ #stat…² #wate…³ #wate…⁴ #wate…⁵ #wate…⁶ #faci…⁷
- *  &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  
- 1 429068 GRID3          08/29/… Unknown &lt;NA&gt;    &lt;NA&gt;    Tapsta… Tapsta… Improv…
- 2 222071 Federal Minis… 08/16/… Yes     Boreho… Well    Mechan… Mechan… Improv…
- 3 160612 WaterAid       12/04/… Yes     Boreho… Well    Hand P… Hand P… Improv…
- 4 160669 WaterAid       12/04/… Yes     Boreho… Well    &lt;NA&gt;    &lt;NA&gt;    Improv…
- 5 160642 WaterAid       12/04/… Yes     Boreho… Well    Hand P… Hand P… Improv…
- 6 160628 WaterAid       12/04/… Yes     Boreho… Well    Hand P… Hand P… Improv…
- 7 160632 WaterAid       12/04/… Yes     Boreho… Well    Hand P… Hand P… Improv…
- 8 642747 Living Water … 10/03/… Yes     Boreho… Well    Mechan… Mechan… Improv…
- 9 642456 Living Water … 10/03/… Yes     Boreho… Well    Hand P… Hand P… Improv…
-10 641347 Living Water … 03/28/… Yes     Boreho… Well    Hand P… Hand P… Improv…
-# … with 94,998 more rows, 60 more variables: `#clean_country_name` &lt;chr&gt;,
-#   `#clean_adm1` &lt;chr&gt;, `#clean_adm2` &lt;chr&gt;, `#clean_adm3` &lt;chr&gt;,
-#   `#clean_adm4` &lt;chr&gt;, `#install_year` &lt;dbl&gt;, `#installer` &lt;chr&gt;,
-#   `#rehab_year` &lt;lgl&gt;, `#rehabilitator` &lt;lgl&gt;, `#management_clean` &lt;chr&gt;,
-#   `#status_clean` &lt;chr&gt;, `#pay` &lt;chr&gt;, `#fecal_coliform_presence` &lt;chr&gt;,
-#   `#fecal_coliform_value` &lt;dbl&gt;, `#subjective_quality` &lt;chr&gt;,
-#   `#activity_id` &lt;chr&gt;, `#scheme_id` &lt;chr&gt;, `#wpdx_id` &lt;chr&gt;, …</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wp_nga</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -365,36 +321,15 @@ Projected CRS: Minna / Nigeria West Belt
 <h3 class="anchored" data-anchor-id="recoding-na-values-into-string">Recoding NA values into string</h3>
 <p>The code chunk below recodes all NA values in the <em>#status_clean</em> column into “Unknown” using the <code>replace_na()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>wp_nga <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/wp_nga.rds"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">replace_na</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span>, <span class="st">"Unknown"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>wp_nga <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/wp_nga.rds"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">replace_na</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span>, <span class="st">"Unknown"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="eda" class="level3">
 <h3 class="anchored" data-anchor-id="eda">EDA</h3>
 <p>The code chunk below uses the <code>freq()</code> function of the <strong>funModeling</strong> package to display the distribution of the <em>#status_clean</em> column values in <em>wp_nga</em> dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(<span class="at">data =</span> wp_nga, <span class="at">input =</span> <span class="st">"#status_clean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: The `&lt;scale&gt;` argument of `guides()` cannot be `FALSE`. Use "none" instead as
-of ggplot2 3.3.4.
-ℹ The deprecated feature was likely used in the funModeling package.
-  Please report the issue at &lt;https://github.com/pablo14/funModeling/issues&gt;.</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="in-class_ex2_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                     #status_clean frequency percentage cumulative_perc
-1                       Functional     45883      48.29           48.29
-2                   Non-Functional     29385      30.93           79.22
-3                          Unknown     10656      11.22           90.44
-4      Functional but needs repair      4579       4.82           95.26
-5 Non-Functional due to dry season      2403       2.53           97.79
-6        Functional but not in use      1686       1.77           99.56
-7         Abandoned/Decommissioned       234       0.25           99.81
-8                        Abandoned       175       0.18           99.99
-9 Non functional due to dry season         7       0.01          100.00</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(<span class="at">data =</span> wp_nga, <span class="at">input =</span> <span class="st">"#status_clean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -404,151 +339,86 @@ of ggplot2 3.3.4.
 <h3 class="anchored" data-anchor-id="extracting-functional-water-points">Extracting functional water points</h3>
 <p>The <code>filter()</code> function of the <strong>dplyr</strong> package will be used to select the functional water points from those rows whose <em>#status_clean</em> values are “Functional”, “Functional but needs repair” and “Functional but not in use”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>wpt_functional <span class="ot">&lt;-</span> wp_nga <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Functional"</span>, </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Functional but needs repair"</span>,</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Functional but not in use"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>wpt_functional <span class="ot">&lt;-</span> wp_nga <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Functional"</span>, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Functional but needs repair"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Functional but not in use"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(<span class="at">data =</span> wpt_functional, <span class="at">input =</span> <span class="st">"#status_clean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="in-class_ex2_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                #status_clean frequency percentage cumulative_perc
-1                  Functional     45883      87.99           87.99
-2 Functional but needs repair      4579       8.78           96.77
-3   Functional but not in use      1686       3.23          100.00</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(<span class="at">data =</span> wpt_functional, <span class="at">input =</span> <span class="st">"#status_clean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="extracting-non-functional-water-points" class="level3">
 <h3 class="anchored" data-anchor-id="extracting-non-functional-water-points">Extracting non-functional water points</h3>
 <p>The <code>filter()</code> function of the <strong>dplyr</strong> package will again be used to select the non-functional water points from those rows whose <em>#status_clean</em> values are “Non-Functional”, “Non-Functional due to dry season”, “Abandoned/Decommissioned”, “Abandoned” and “Non functional due to dry season”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>wpt_nonfunctional <span class="ot">&lt;-</span> wp_nga <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Non-Functional"</span>, </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Non-Functional due to dry season"</span>,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Non functional due to dry season"</span>,</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Abandoned/Decommissioned"</span>,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Abandoned"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>wpt_nonfunctional <span class="ot">&lt;-</span> wp_nga <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Non-Functional"</span>, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Non-Functional due to dry season"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Non functional due to dry season"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Abandoned/Decommissioned"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Abandoned"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(<span class="at">data =</span> wpt_nonfunctional, <span class="at">input =</span> <span class="st">"#status_clean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="in-class_ex2_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                     #status_clean frequency percentage cumulative_perc
-1                   Non-Functional     29385      91.25           91.25
-2 Non-Functional due to dry season      2403       7.46           98.71
-3         Abandoned/Decommissioned       234       0.73           99.44
-4                        Abandoned       175       0.54           99.98
-5 Non functional due to dry season         7       0.02          100.00</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(<span class="at">data =</span> wpt_nonfunctional, <span class="at">input =</span> <span class="st">"#status_clean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="extracting-water-points-with-unknown-class" class="level3">
 <h3 class="anchored" data-anchor-id="extracting-water-points-with-unknown-class">Extracting water points with Unknown class</h3>
 <p>Lastly, the remaining water points with “Unknown” status are grouped using the same <code>filter()</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>wpt_unknown <span class="ot">&lt;-</span> wp_nga <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Unknown"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>wpt_unknown <span class="ot">&lt;-</span> wp_nga <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Unknown"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="performing-point-in-polygon-count" class="level2">
 <h2 class="anchored" data-anchor-id="performing-point-in-polygon-count">Performing Point-in-Polygon Count</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>nga_wp <span class="ot">&lt;-</span> nigeria_sf <span class="sc">%&gt;%</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">total wpt</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wp_nga))) <span class="sc">%&gt;%</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">wpt functional</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wpt_functional))) <span class="sc">%&gt;%</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">wpt non-functional</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wpt_nonfunctional))) <span class="sc">%&gt;%</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">wpt unknown</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wpt_unknown)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>nga_wp <span class="ot">&lt;-</span> nigeria_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">total wpt</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wp_nga))) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">wpt functional</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wpt_functional))) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">wpt non-functional</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wpt_nonfunctional))) <span class="sc">%&gt;%</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">wpt unknown</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria_sf, wpt_unknown)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="saving-the-analytical-data-table" class="level2">
 <h2 class="anchored" data-anchor-id="saving-the-analytical-data-table">Saving the Analytical Data Table</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>nga_wp <span class="ot">&lt;-</span> nga_wp <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct_functional =</span> <span class="st">`</span><span class="at">wpt functional</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">total wpt</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">pct_non-functional</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">wpt non-functional</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">total wpt</span><span class="st">`</span>) </span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>nga_wp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 774 features and 11 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 28879.72 ymin: 30292.37 xmax: 1343798 ymax: 1094244
-Projected CRS: Minna / Nigeria West Belt
-First 10 features:
-        shapeName Level                    shapeID shapeGroup shapeType
-1       Aba North  ADM2 NGA-ADM2-72505758B79815894        NGA      ADM2
-2       Aba South  ADM2 NGA-ADM2-72505758B67905963        NGA      ADM2
-3          Abadam  ADM2 NGA-ADM2-72505758B57073987        NGA      ADM2
-4           Abaji  ADM2 NGA-ADM2-72505758B61968000        NGA      ADM2
-5            Abak  ADM2 NGA-ADM2-72505758B39432389        NGA      ADM2
-6       Abakaliki  ADM2 NGA-ADM2-72505758B36739173        NGA      ADM2
-7  Abeokuta North  ADM2 NGA-ADM2-72505758B86358915        NGA      ADM2
-8  Abeokuta South  ADM2 NGA-ADM2-72505758B56925175        NGA      ADM2
-9             Abi  ADM2  NGA-ADM2-72505758B1616690        NGA      ADM2
-10    Aboh-Mbaise  ADM2 NGA-ADM2-72505758B78555816        NGA      ADM2
-                         geometry total wpt wpt functional wpt non-functional
-1  MULTIPOLYGON (((552560.3 12...        17              7                  9
-2  MULTIPOLYGON (((545153.6 12...        71             29                 35
-3  MULTIPOLYGON (((1245549 106...         0              0                  0
-4  MULTIPOLYGON (((510602.3 57...        57             23                 34
-5  MULTIPOLYGON (((598086 1218...        48             23                 25
-6  MULTIPOLYGON (((663801.7 25...       233             82                 42
-7  MULTIPOLYGON (((81132.88 37...        34             16                 15
-8  MULTIPOLYGON (((98464.54 34...       119             72                 33
-9  MULTIPOLYGON (((635478 2187...       152             79                 62
-10 MULTIPOLYGON (((543608.8 15...        66             18                 26
-   wpt unknown pct_functional pct_non-functional
-1            1      0.4117647          0.5294118
-2            7      0.4084507          0.4929577
-3            0            NaN                NaN
-4            0      0.4035088          0.5964912
-5            0      0.4791667          0.5208333
-6          109      0.3519313          0.1802575
-7            3      0.4705882          0.4411765
-8           14      0.6050420          0.2773109
-9           11      0.5197368          0.4078947
-10          22      0.2727273          0.3939394</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nga_wp <span class="ot">&lt;-</span> nga_wp <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct_functional =</span> <span class="st">`</span><span class="at">wpt functional</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">total wpt</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">pct_non-functional</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">wpt non-functional</span><span class="st">`</span><span class="sc">/</span><span class="st">`</span><span class="at">total wpt</span><span class="st">`</span>) </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>nga_wp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The above derived data will be saved as a RDS file for subsequent geospatial analysis of the water points.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(nga_wp, <span class="st">"data/rds/nga_wp.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(nga_wp, <span class="st">"data/rds/nga_wp.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="visualizing-the-spatial-distribution-of-water-points" class="level2">
 <h2 class="anchored" data-anchor-id="visualizing-the-spatial-distribution-of-water-points">Visualizing the Spatial Distribution of Water Points</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>nga_wp <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/nga_wp.rds"</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>total <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"total wpt"</span>) <span class="sc">+</span> </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>wp_functional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"wpt functional"</span>) <span class="sc">+</span> </span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>wp_nonfunctional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"wpt non-functional"</span>) <span class="sc">+</span> </span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>unknown <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"wpt unknown"</span>) <span class="sc">+</span> </span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>pct_functional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"pct_functional"</span>) <span class="sc">+</span> </span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">fun=</span><span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">formatC</span>(x <span class="sc">*</span> <span class="dv">100</span>, <span class="at">digits=</span><span class="dv">0</span>, <span class="at">format=</span><span class="st">"f"</span>), <span class="st">" %"</span>)))</span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>pct_nonfunctional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"pct_non-functional"</span>) <span class="sc">+</span> </span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">fun=</span><span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">formatC</span>(x <span class="sc">*</span> <span class="dv">100</span>, <span class="at">digits=</span><span class="dv">0</span>, <span class="at">format=</span><span class="st">"f"</span>), <span class="st">" %"</span>)))</span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, <span class="at">ncol=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Some legend labels were too wide. These labels have been resized to 0.64, 0.64, 0.64, 0.58. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
-Some legend labels were too wide. These labels have been resized to 0.64, 0.64, 0.64, 0.58. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>nga_wp <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/nga_wp.rds"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>total <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"total wpt"</span>) <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>wp_functional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"wpt functional"</span>) <span class="sc">+</span> </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>wp_nonfunctional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"wpt non-functional"</span>) <span class="sc">+</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>unknown <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"wpt unknown"</span>) <span class="sc">+</span> </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>pct_functional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"pct_functional"</span>) <span class="sc">+</span> </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">fun=</span><span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">formatC</span>(x <span class="sc">*</span> <span class="dv">100</span>, <span class="at">digits=</span><span class="dv">0</span>, <span class="at">format=</span><span class="st">"f"</span>), <span class="st">" %"</span>)))</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>pct_nonfunctional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(nga_wp, <span class="st">"pct_non-functional"</span>) <span class="sc">+</span> </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">fun=</span><span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">formatC</span>(x <span class="sc">*</span> <span class="dv">100</span>, <span class="at">digits=</span><span class="dv">0</span>, <span class="at">format=</span><span class="st">"f"</span>), <span class="st">" %"</span>)))</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, <span class="at">ncol=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="in-class_ex2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="in-class_ex2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="1344"></p>
 </div>
 </div>
 <p>From the above maps, it appears that the northern regions of Nigeria tend to enjoy both a higher count as well as percentage of functional water points, while the central and southern regions suffer a higher count and percentage of non-functional ones.</p>
