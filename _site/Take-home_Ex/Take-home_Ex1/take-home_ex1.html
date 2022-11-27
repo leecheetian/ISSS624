@@ -171,6 +171,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex1/in-class_ex1.html">
  <span class="dropdown-text">In-class Exercise 1</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex2/in-class_ex2.html">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -212,16 +216,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#importing-data-into-r" id="toc-importing-data-into-r" class="nav-link" data-scroll-target="#importing-data-into-r">Importing Data into R</a>
   <ul class="collapse">
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The Data</a></li>
-  <li><a href="#importing-shapefile-and-transforming-to-epsg-26391-map-projection" id="toc-importing-shapefile-and-transforming-to-epsg-26391-map-projection" class="nav-link" data-scroll-target="#importing-shapefile-and-transforming-to-epsg-26391-map-projection">Importing shapefile and Transforming to EPSG 26391 Map Projection</a></li>
-  <li><a href="#importing-aspatial-data" id="toc-importing-aspatial-data" class="nav-link" data-scroll-target="#importing-aspatial-data">Importing Aspatial Data</a></li>
-  <li><a href="#joining-the-aspatial-data-and-the-geospatial-data" id="toc-joining-the-aspatial-data-and-the-geospatial-data" class="nav-link" data-scroll-target="#joining-the-aspatial-data-and-the-geospatial-data">Joining the Aspatial Data and the Geospatial Data</a></li>
+  <li><a href="#importing-nigeria-shapefile" id="toc-importing-nigeria-shapefile" class="nav-link" data-scroll-target="#importing-nigeria-shapefile">Importing Nigeria Shapefile</a></li>
+  <li><a href="#importing-water-points-aspatial-data" id="toc-importing-water-points-aspatial-data" class="nav-link" data-scroll-target="#importing-water-points-aspatial-data">Importing Water Points Aspatial Data</a></li>
   </ul></li>
-  <li><a href="#plotting-thematic-map-of-water-point-data" id="toc-plotting-thematic-map-of-water-point-data" class="nav-link" data-scroll-target="#plotting-thematic-map-of-water-point-data">Plotting Thematic Map of Water Point Data</a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#recoding-na-values-into-string" id="toc-recoding-na-values-into-string" class="nav-link" data-scroll-target="#recoding-na-values-into-string">Recoding NA values into string</a></li>
+  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
+  </ul></li>
+  <li><a href="#extracting-water-points-data" id="toc-extracting-water-points-data" class="nav-link" data-scroll-target="#extracting-water-points-data">Extracting Water Points Data</a>
+  <ul class="collapse">
+  <li><a href="#extracting-functional-water-points" id="toc-extracting-functional-water-points" class="nav-link" data-scroll-target="#extracting-functional-water-points">Extracting functional water points</a></li>
+  <li><a href="#extracting-non-functional-water-points" id="toc-extracting-non-functional-water-points" class="nav-link" data-scroll-target="#extracting-non-functional-water-points">Extracting non-functional water points</a></li>
+  <li><a href="#extracting-water-points-with-unknown-class" id="toc-extracting-water-points-with-unknown-class" class="nav-link" data-scroll-target="#extracting-water-points-with-unknown-class">Extracting water points with Unknown class</a></li>
+  </ul></li>
+  <li><a href="#performing-point-in-polygon-count" id="toc-performing-point-in-polygon-count" class="nav-link" data-scroll-target="#performing-point-in-polygon-count">Performing Point-in-Polygon Count</a></li>
+  <li><a href="#saving-the-analytical-data-table" id="toc-saving-the-analytical-data-table" class="nav-link" data-scroll-target="#saving-the-analytical-data-table">Saving the Analytical Data Table</a></li>
+  <li><a href="#visualizing-the-spatial-distribution-of-water-points" id="toc-visualizing-the-spatial-distribution-of-water-points" class="nav-link" data-scroll-target="#visualizing-the-spatial-distribution-of-water-points">Visualizing the Spatial Distribution of Water Points</a></li>
   <li><a href="#cluster-and-outlier-analysis" id="toc-cluster-and-outlier-analysis" class="nav-link" data-scroll-target="#cluster-and-outlier-analysis">Cluster and Outlier Analysis</a>
   <ul class="collapse">
   <li><a href="#computing-contiguity-spatial-weights" id="toc-computing-contiguity-spatial-weights" class="nav-link" data-scroll-target="#computing-contiguity-spatial-weights">Computing Contiguity Spatial Weights</a></li>
   <li><a href="#row-standardized-weights-matrix" id="toc-row-standardized-weights-matrix" class="nav-link" data-scroll-target="#row-standardized-weights-matrix">Row-Standardized Weights Matrix</a></li>
   <li><a href="#global-spatial-autocorrelation-morans-i-test" id="toc-global-spatial-autocorrelation-morans-i-test" class="nav-link" data-scroll-target="#global-spatial-autocorrelation-morans-i-test">Global Spatial Autocorrelation: Moran’s I test</a></li>
+  <li><a href="#computing-local-morans-i" id="toc-computing-local-morans-i" class="nav-link" data-scroll-target="#computing-local-morans-i">Computing Local Moran’s I</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -257,24 +274,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>Geospatial Analytics for Social Good</h1>
 <section id="objective" class="level2">
 <h2 class="anchored" data-anchor-id="objective">Objective</h2>
-<p>To reveal the geospatial patterns of Not Functional water points in Nigeria using global and local spatial association techniques.</p>
+<p>To reveal the geospatial patterns of Functional and Non-functional water points in Nigeria using global and local spatial association techniques.</p>
 </section>
 <section id="loading-r-packages" class="level2">
 <h2 class="anchored" data-anchor-id="loading-r-packages">Loading R Packages</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, spdep, tmap, tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, spdep, tmap, tidyverse, funModeling)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="importing-data-into-r" class="level2">
 <h2 class="anchored" data-anchor-id="importing-data-into-r">Importing Data into R</h2>
 <section id="the-data" class="level3">
 <h3 class="anchored" data-anchor-id="the-data">The Data</h3>
+<p>ESRI shapefile data of Nigeria showing Level-2 Administrative (or Local Government Area, LGA) boundary was obtained from geoBoundaries:</p>
 <p><img src="nigeria adm2 geospatial data.jpg" class="img-fluid"></p>
+<p>Water point data in CSV format was obtained from WPdx data repository:</p>
 <p><img src="nigeria aspatial data.jpg" class="img-fluid"></p>
 <p>As the size of the CSV file has exceeded the GitHub limitation of 100 MB, it shall not be included in the Commit and Push to GitHub and Netlify. The wrangled data derived from the following steps for the subsequent geospatial analysis will be exported as a RDS file, and this will be pushed to GitHub and Netlify instead.</p>
 </section>
-<section id="importing-shapefile-and-transforming-to-epsg-26391-map-projection" class="level3">
-<h3 class="anchored" data-anchor-id="importing-shapefile-and-transforming-to-epsg-26391-map-projection">Importing shapefile and Transforming to EPSG 26391 Map Projection</h3>
+<section id="importing-nigeria-shapefile" class="level3">
+<h3 class="anchored" data-anchor-id="importing-nigeria-shapefile">Importing Nigeria Shapefile</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>nigeria_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn=</span><span class="st">"data/Nigeria"</span>, <span class="at">layer=</span><span class="st">"geoBoundaries-NGA-ADM2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -307,6 +326,8 @@ $ shapeType  &lt;chr&gt; "ADM2", "ADM2", "ADM2", "ADM2", "ADM2", "ADM2", "ADM2",
 $ geometry   &lt;MULTIPOLYGON [°]&gt; MULTIPOLYGON (((7.401109 5...., MULTIPOLYGON (…</code></pre>
 </div>
 </div>
+<section id="transforming-to-epsg-26391-map-projection" class="level4">
+<h4 class="anchored" data-anchor-id="transforming-to-epsg-26391-map-projection">Transforming to EPSG 26391 Map Projection</h4>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>nigeria26391 <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(nigeria_sf, <span class="at">crs =</span> <span class="dv">26391</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>nigeria26391</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -342,10 +363,12 @@ First 10 features:
 </div>
 </div>
 </section>
-<section id="importing-aspatial-data" class="level3">
-<h3 class="anchored" data-anchor-id="importing-aspatial-data">Importing Aspatial Data</h3>
+</section>
+<section id="importing-water-points-aspatial-data" class="level3">
+<h3 class="anchored" data-anchor-id="importing-water-points-aspatial-data">Importing Water Points Aspatial Data</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>WPdx_csv <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/WPdx+/Water_Point_Data_Exchange_-_Plus__WPdx__.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>nigeria_csv <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/WPdx+/Water_Point_Data_Exchange_-_Plus__WPdx__.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#clean_country_name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Nigeria"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: One or more parsing issues, call `problems()` on your data frame for details,
 e.g.:
@@ -364,164 +387,184 @@ lgl  (4): #rehab_year, #rehabilitator, is_urban, latest_record
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 </div>
-<section id="data-wrangling" class="level4">
-<h4 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h4>
-<p>Retrieving data for Nigeria only and where functional status is known.</p>
+<section id="converting-to-simple-feature-data-frame-and-transforming-to-same-map-projection" class="level4">
+<h4 class="anchored" data-anchor-id="converting-to-simple-feature-data-frame-and-transforming-to-same-map-projection">Converting to simple feature data frame and transforming to same map projection</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nigeria_data <span class="ot">&lt;-</span> WPdx_csv <span class="sc">%&gt;%</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#country_name</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Nigeria"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="st">`</span><span class="at">#status</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">#adm2</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">functionality</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">case_when</span>(<span class="fu">grepl</span>(<span class="st">"^Functional"</span>, <span class="st">`</span><span class="at">#status</span><span class="st">`</span>) </span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                                     <span class="sc">~</span> <span class="st">"Functional"</span>, </span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                                     <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Non-functional"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="st">`</span><span class="at">functionality</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">`</span><span class="at">functionality</span><span class="st">`</span>, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">f2nfrate</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Functional</span><span class="st">`</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Non-functional</span><span class="st">`</span>), </span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                             <span class="st">`</span><span class="at">Functional</span><span class="st">`</span> <span class="sc">/</span> <span class="st">`</span><span class="at">Non-functional</span><span class="st">`</span>,</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Functional</span><span class="st">`</span>), </span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                                     <span class="st">`</span><span class="at">Functional</span><span class="st">`</span>, <span class="dv">0</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nigeria_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 749 × 4
-# Groups:   #adm2 [749]
-   `#adm2`        Functional `Non-functional` f2nfrate
-   &lt;chr&gt;               &lt;int&gt;            &lt;int&gt;    &lt;dbl&gt;
- 1 Aba South              33               16    2.06 
- 2 Abaji                  33               36    0.917
- 3 Abak                   22               25    0.88 
- 4 Abakaliki              71               34    2.09 
- 5 Abeokuta North         11                8    1.38 
- 6 Abeokuta South         75               39    1.92 
- 7 Abi                    79               60    1.32 
- 8 Abia North              6               28    0.214
- 9 Aboh-Mbaise            18               26    0.692
-10 Abua/Odual             25               13    1.92 
-# … with 739 more rows</code></pre>
-</div>
-</div>
-<p>The following assumptions were taken in the calculation of the Functional-to-Non-functional ratio, <em>f2nfrate</em>, of the water points in each Local Government Area (LGA):</p>
-<ul>
-<li><p>For LGAs with both Functional and Non-functional water point records, the <em>f2nfrate</em> is calculated by the count of the former divided by the count of the latter.</p></li>
-<li><p>For LGAs with only Functional water point records but no Non-functional water point records, the <em>f2nfrate</em> is assigned the count of the Functional water points (ie. assuming the Non-functional water point count is 1), as it is not feasible to divide by 0.</p></li>
-<li><p>For LGAs with only Non-functional water point records and no Functional water point records, the <em>f2nfrate</em> is assigned as 0.</p></li>
-</ul>
-</section>
-</section>
-<section id="joining-the-aspatial-data-and-the-geospatial-data" class="level3">
-<h3 class="anchored" data-anchor-id="joining-the-aspatial-data-and-the-geospatial-data">Joining the Aspatial Data and the Geospatial Data</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>nigeria_WPdx <span class="ot">&lt;-</span> <span class="fu">left_join</span>(nigeria26391, nigeria_data, </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"shapeName"</span> <span class="ot">=</span> <span class="st">"#adm2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nigeria_WPdx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 774 features and 8 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 28879.72 ymin: 30292.37 xmax: 1343798 ymax: 1094244
-Projected CRS: Minna / Nigeria West Belt
-First 10 features:
-        shapeName Level                    shapeID shapeGroup shapeType
-1       Aba North  ADM2 NGA-ADM2-72505758B79815894        NGA      ADM2
-2       Aba South  ADM2 NGA-ADM2-72505758B67905963        NGA      ADM2
-3          Abadam  ADM2 NGA-ADM2-72505758B57073987        NGA      ADM2
-4           Abaji  ADM2 NGA-ADM2-72505758B61968000        NGA      ADM2
-5            Abak  ADM2 NGA-ADM2-72505758B39432389        NGA      ADM2
-6       Abakaliki  ADM2 NGA-ADM2-72505758B36739173        NGA      ADM2
-7  Abeokuta North  ADM2 NGA-ADM2-72505758B86358915        NGA      ADM2
-8  Abeokuta South  ADM2 NGA-ADM2-72505758B56925175        NGA      ADM2
-9             Abi  ADM2  NGA-ADM2-72505758B1616690        NGA      ADM2
-10    Aboh-Mbaise  ADM2 NGA-ADM2-72505758B78555816        NGA      ADM2
-   Functional Non-functional  f2nfrate                       geometry
-1          NA             NA        NA MULTIPOLYGON (((552560.3 12...
-2          33             16 2.0625000 MULTIPOLYGON (((545153.6 12...
-3          NA             NA        NA MULTIPOLYGON (((1245549 106...
-4          33             36 0.9166667 MULTIPOLYGON (((510602.3 57...
-5          22             25 0.8800000 MULTIPOLYGON (((598086 1218...
-6          71             34 2.0882353 MULTIPOLYGON (((663801.7 25...
-7          11              8 1.3750000 MULTIPOLYGON (((81132.88 37...
-8          75             39 1.9230769 MULTIPOLYGON (((98464.54 34...
-9          79             60 1.3166667 MULTIPOLYGON (((635478 2187...
-10         18             26 0.6923077 MULTIPOLYGON (((543608.8 15...</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(nigeria_WPdx, <span class="st">"data/rds/nigeria_WPdx.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>nigeria_WPdx <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/nigeria_WPdx.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>nigeria_WPdx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Simple feature collection with 774 features and 8 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 28879.72 ymin: 30292.37 xmax: 1343798 ymax: 1094244
-Projected CRS: Minna / Nigeria West Belt
-First 10 features:
-        shapeName Level                    shapeID shapeGroup shapeType
-1       Aba North  ADM2 NGA-ADM2-72505758B79815894        NGA      ADM2
-2       Aba South  ADM2 NGA-ADM2-72505758B67905963        NGA      ADM2
-3          Abadam  ADM2 NGA-ADM2-72505758B57073987        NGA      ADM2
-4           Abaji  ADM2 NGA-ADM2-72505758B61968000        NGA      ADM2
-5            Abak  ADM2 NGA-ADM2-72505758B39432389        NGA      ADM2
-6       Abakaliki  ADM2 NGA-ADM2-72505758B36739173        NGA      ADM2
-7  Abeokuta North  ADM2 NGA-ADM2-72505758B86358915        NGA      ADM2
-8  Abeokuta South  ADM2 NGA-ADM2-72505758B56925175        NGA      ADM2
-9             Abi  ADM2  NGA-ADM2-72505758B1616690        NGA      ADM2
-10    Aboh-Mbaise  ADM2 NGA-ADM2-72505758B78555816        NGA      ADM2
-   Functional Non-functional  f2nfrate                       geometry
-1          NA             NA        NA MULTIPOLYGON (((552560.3 12...
-2          33             16 2.0625000 MULTIPOLYGON (((545153.6 12...
-3          NA             NA        NA MULTIPOLYGON (((1245549 106...
-4          33             36 0.9166667 MULTIPOLYGON (((510602.3 57...
-5          22             25 0.8800000 MULTIPOLYGON (((598086 1218...
-6          71             34 2.0882353 MULTIPOLYGON (((663801.7 25...
-7          11              8 1.3750000 MULTIPOLYGON (((81132.88 37...
-8          75             39 1.9230769 MULTIPOLYGON (((98464.54 34...
-9          79             60 1.3166667 MULTIPOLYGON (((635478 2187...
-10         18             26 0.6923077 MULTIPOLYGON (((543608.8 15...</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nigeria_wp_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(nigeria_csv, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"#lon_deg"</span>, <span class="st">"#lat_deg"</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">26391</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
-<section id="plotting-thematic-map-of-water-point-data" class="level2">
-<h2 class="anchored" data-anchor-id="plotting-thematic-map-of-water-point-data">Plotting Thematic Map of Water Point Data</h2>
+</section>
+<section id="data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h2>
+<section id="recoding-na-values-into-string" class="level3">
+<h3 class="anchored" data-anchor-id="recoding-na-values-into-string">Recoding NA values into string</h3>
+<p>Recoding all NA values in <em>#status_clean</em> column into “Unknown”:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>fmap <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(nigeria_WPdx) <span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"Functional"</span>, <span class="at">title =</span> <span class="st">"Functional count"</span>, </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">style =</span> <span class="st">"jenks"</span>, <span class="at">palette =</span> <span class="st">"Blues"</span>, <span class="at">n =</span> <span class="dv">6</span>, <span class="at">border.alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>nfmap <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(nigeria_WPdx) <span class="sc">+</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"Non-functional"</span>, <span class="at">title =</span> <span class="st">"Non-functional count"</span>, </span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">style =</span> <span class="st">"jenks"</span>, <span class="at">palette =</span> <span class="st">"Oranges"</span>, <span class="at">n =</span> <span class="dv">6</span>, <span class="at">border.alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>f2nfmap <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(nigeria_WPdx) <span class="sc">+</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="st">"f2nfrate"</span>, <span class="at">title =</span> <span class="st">"Functional to Non-functional ratio"</span>, </span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">style =</span> <span class="st">"jenks"</span>, <span class="at">palette =</span> <span class="st">"Greens"</span>, <span class="at">n =</span> <span class="dv">6</span>, <span class="at">border.alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(fmap, nfmap, f2nfmap, <span class="at">ncol=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>nigeria_wp <span class="ot">&lt;-</span> nigeria_wp_sf <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">replace_na</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span>, <span class="st">"Unknown"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="eda" class="level3">
+<h3 class="anchored" data-anchor-id="eda">EDA</h3>
+<p>Listing all values in <em>#status_clean</em> column:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freq</span>(<span class="at">data =</span> nigeria_wp, <span class="at">input =</span> <span class="st">"#status_clean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The `&lt;scale&gt;` argument of `guides()` cannot be `FALSE`. Use "none" instead as
+of ggplot2 3.3.4.
+ℹ The deprecated feature was likely used in the funModeling package.
+  Please report the issue at &lt;https://github.com/pablo14/funModeling/issues&gt;.</code></pre>
+</div>
 <div class="cell-output-display">
-<p><img src="take-home_ex1_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<p><img src="take-home_ex1_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     #status_clean frequency percentage cumulative_perc
+1                       Functional     45883      48.29           48.29
+2                   Non-Functional     29385      30.93           79.22
+3                          Unknown     10656      11.22           90.44
+4      Functional but needs repair      4579       4.82           95.26
+5 Non-Functional due to dry season      2403       2.53           97.79
+6        Functional but not in use      1686       1.77           99.56
+7         Abandoned/Decommissioned       234       0.25           99.81
+8                        Abandoned       175       0.18           99.99
+9 Non functional due to dry season         7       0.01          100.00</code></pre>
 </div>
 </div>
-<p>It appears the functional water points are mostly concentrated in the northern regions of Nigeria, and corresponds to a higher functional-to-non-functional ratio. The central and southern regions see a higher number of non-functional water points and lower functional-to-non-functional ratio in contrast.</p>
+</section>
+</section>
+<section id="extracting-water-points-data" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-water-points-data">Extracting Water Points Data</h2>
+<section id="extracting-functional-water-points" class="level3">
+<h3 class="anchored" data-anchor-id="extracting-functional-water-points">Extracting functional water points</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>wp_functional <span class="ot">&lt;-</span> nigeria_wp <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Functional"</span>, </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Functional but needs repair"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Functional but not in use"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="extracting-non-functional-water-points" class="level3">
+<h3 class="anchored" data-anchor-id="extracting-non-functional-water-points">Extracting non-functional water points</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>wp_nonfunctional <span class="ot">&lt;-</span> nigeria_wp <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Non-Functional"</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Non-Functional due to dry season"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Non functional due to dry season"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Abandoned/Decommissioned"</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Abandoned"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="extracting-water-points-with-unknown-class" class="level3">
+<h3 class="anchored" data-anchor-id="extracting-water-points-with-unknown-class">Extracting water points with Unknown class</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>wp_unknown <span class="ot">&lt;-</span> nigeria_wp <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">#status_clean</span><span class="st">`</span> <span class="sc">==</span> <span class="st">"Unknown"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="performing-point-in-polygon-count" class="level2">
+<h2 class="anchored" data-anchor-id="performing-point-in-polygon-count">Performing Point-in-Polygon Count</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>wp_nigeria <span class="ot">&lt;-</span> nigeria26391 <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Total water points</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria26391, nigeria_wp))) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Functional status</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria26391, wp_functional))) <span class="sc">%&gt;%</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Non-functional status</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria26391, wp_nonfunctional))) <span class="sc">%&gt;%</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Unknown status</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">lengths</span>(</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersects</span>(nigeria26391, wp_unknown))) <span class="sc">%&gt;%</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Functional %</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Functional status</span><span class="st">`</span> <span class="sc">/</span> <span class="st">`</span><span class="at">Total water points</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">Non-functional %</span><span class="st">`</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Non-functional status</span><span class="st">`</span> <span class="sc">/</span> <span class="st">`</span><span class="at">Total water points</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>wp_nigeria</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 774 features and 11 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 28879.72 ymin: 30292.37 xmax: 1343798 ymax: 1094244
+Projected CRS: Minna / Nigeria West Belt
+First 10 features:
+        shapeName Level                    shapeID shapeGroup shapeType
+1       Aba North  ADM2 NGA-ADM2-72505758B79815894        NGA      ADM2
+2       Aba South  ADM2 NGA-ADM2-72505758B67905963        NGA      ADM2
+3          Abadam  ADM2 NGA-ADM2-72505758B57073987        NGA      ADM2
+4           Abaji  ADM2 NGA-ADM2-72505758B61968000        NGA      ADM2
+5            Abak  ADM2 NGA-ADM2-72505758B39432389        NGA      ADM2
+6       Abakaliki  ADM2 NGA-ADM2-72505758B36739173        NGA      ADM2
+7  Abeokuta North  ADM2 NGA-ADM2-72505758B86358915        NGA      ADM2
+8  Abeokuta South  ADM2 NGA-ADM2-72505758B56925175        NGA      ADM2
+9             Abi  ADM2  NGA-ADM2-72505758B1616690        NGA      ADM2
+10    Aboh-Mbaise  ADM2 NGA-ADM2-72505758B78555816        NGA      ADM2
+                         geometry Total water points Functional status
+1  MULTIPOLYGON (((552560.3 12...                 17                 7
+2  MULTIPOLYGON (((545153.6 12...                 71                29
+3  MULTIPOLYGON (((1245549 106...                  0                 0
+4  MULTIPOLYGON (((510602.3 57...                 57                23
+5  MULTIPOLYGON (((598086 1218...                 48                23
+6  MULTIPOLYGON (((663801.7 25...                233                82
+7  MULTIPOLYGON (((81132.88 37...                 34                16
+8  MULTIPOLYGON (((98464.54 34...                119                72
+9  MULTIPOLYGON (((635478 2187...                152                79
+10 MULTIPOLYGON (((543608.8 15...                 66                18
+   Non-functional status Unknown status Functional % Non-functional %
+1                      9              1    0.4117647        0.5294118
+2                     35              7    0.4084507        0.4929577
+3                      0              0          NaN              NaN
+4                     34              0    0.4035088        0.5964912
+5                     25              0    0.4791667        0.5208333
+6                     42            109    0.3519313        0.1802575
+7                     15              3    0.4705882        0.4411765
+8                     33             14    0.6050420        0.2773109
+9                     62             11    0.5197368        0.4078947
+10                    26             22    0.2727273        0.3939394</code></pre>
+</div>
+</div>
+</section>
+<section id="saving-the-analytical-data-table" class="level2">
+<h2 class="anchored" data-anchor-id="saving-the-analytical-data-table">Saving the Analytical Data Table</h2>
+<p>The data derived above is saved as a RDS file for subsequent geospatial analysis of the water points:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(wp_nigeria, <span class="st">"data/rds/wp_nigeria.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizing-the-spatial-distribution-of-water-points" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-spatial-distribution-of-water-points">Visualizing the Spatial Distribution of Water Points</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>wp_nigeria <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/rds/wp_nigeria.rds"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>total <span class="ot">&lt;-</span> <span class="fu">qtm</span>(wp_nigeria, <span class="st">"Total water points"</span>, <span class="at">fill.palette =</span> <span class="st">"Purples"</span>) <span class="sc">+</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>wp_functional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(wp_nigeria, <span class="st">"Functional status"</span>, <span class="at">fill.palette =</span> <span class="st">"Blues"</span>) <span class="sc">+</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>wp_nonfunctional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(wp_nigeria, <span class="st">"Non-functional status"</span>, <span class="at">fill.palette =</span> <span class="st">"Oranges"</span>) <span class="sc">+</span> </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>unknown <span class="ot">&lt;-</span> <span class="fu">qtm</span>(wp_nigeria, <span class="st">"Unknown status"</span>, <span class="at">fill.palette =</span> <span class="st">"Greys"</span>) <span class="sc">+</span> </span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>pct_functional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(wp_nigeria, <span class="st">"Functional %"</span>, <span class="at">fill.palette =</span> <span class="st">"Blues"</span>) <span class="sc">+</span> </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">fun=</span><span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">formatC</span>(x <span class="sc">*</span> <span class="dv">100</span>, <span class="at">digits=</span><span class="dv">0</span>, <span class="at">format=</span><span class="st">"f"</span>), <span class="st">" %"</span>)))</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>pct_nonfunctional <span class="ot">&lt;-</span> <span class="fu">qtm</span>(wp_nigeria, <span class="st">"Non-functional %"</span>, <span class="at">fill.palette =</span> <span class="st">"Oranges"</span>) <span class="sc">+</span> </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">fun=</span><span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">formatC</span>(x <span class="sc">*</span> <span class="dv">100</span>, <span class="at">digits=</span><span class="dv">0</span>, <span class="at">format=</span><span class="st">"f"</span>), <span class="st">" %"</span>)))</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, <span class="at">ncol=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="take-home_ex1_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="1344"></p>
+</div>
+</div>
+<p>From the above maps, it appears that the northern regions of Nigeria tend to enjoy both a higher count as well as percentage of functional water points, while the central and southern regions suffer a higher count and percentage of non-functional ones.</p>
 </section>
 <section id="cluster-and-outlier-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="cluster-and-outlier-analysis">Cluster and Outlier Analysis</h2>
 <section id="computing-contiguity-spatial-weights" class="level3">
 <h3 class="anchored" data-anchor-id="computing-contiguity-spatial-weights">Computing Contiguity Spatial Weights</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>wm_q <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(nigeria_WPdx, <span class="at">queen =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(wm_q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>wm_q <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(wp_nigeria, <span class="at">queen =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(wm_q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Neighbour list object:
 Number of regions: 774 
@@ -544,8 +587,8 @@ Link number distribution:
 <section id="row-standardized-weights-matrix" class="level3">
 <h3 class="anchored" data-anchor-id="row-standardized-weights-matrix">Row-Standardized Weights Matrix</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>rswm_q <span class="ot">&lt;-</span> <span class="fu">nb2listw</span>(wm_q, <span class="at">style =</span> <span class="st">"W"</span>, <span class="at">zero.policy =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rswm_q, <span class="at">zero.policy =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rswm_q <span class="ot">&lt;-</span> <span class="fu">nb2listw</span>(wm_q, <span class="at">style =</span> <span class="st">"W"</span>, <span class="at">zero.policy =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(rswm_q, <span class="at">zero.policy =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Characteristics of weights list object:
 Neighbour list object:
@@ -566,27 +609,44 @@ W 773 597529 773 285.0658 3198.414</code></pre>
 <section id="global-spatial-autocorrelation-morans-i-test" class="level3">
 <h3 class="anchored" data-anchor-id="global-spatial-autocorrelation-morans-i-test">Global Spatial Autocorrelation: Moran’s I test</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.test</span>(nigeria_WPdx<span class="sc">$</span>f2nfrate, </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">listw =</span> rswm_q, </span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">zero.policy =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">na.action =</span> na.omit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.test</span>(wp_nigeria<span class="sc">$</span><span class="st">`</span><span class="at">Functional %</span><span class="st">`</span>, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">listw =</span> rswm_q, </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">zero.policy =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">na.action =</span> na.omit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Moran I test under randomisation
 
-data:  nigeria_WPdx$f2nfrate  
+data:  wp_nigeria$`Functional %`  
 weights: rswm_q 
-omitted: 1, 3, 16, 30, 37, 40, 58, 62, 63, 91, 112, 136, 145, 146, 150, 186, 187, 188, 202, 210, 211, 212, 224, 232, 235, 244, 250, 261, 262, 268, 271, 276, 284, 287, 296, 313, 328, 335, 341, 342, 357, 364, 365, 368, 385, 387, 394, 396, 397, 400, 406, 416, 421, 424, 439, 447, 460, 473, 475, 478, 491, 492, 496, 509, 521, 525, 526, 529, 542, 548, 553, 566, 567, 570, 572, 591, 622, 623, 624, 626, 627, 641, 647, 659, 728, 732, 736, 757, 759, 770 n reduced by no-neighbour observations
-  
+omitted: 3, 86, 241, 250, 252, 261, 400, 406, 447, 473, 492, 507, 526   
 
-Moran I statistic standard deviate = 7.8123, p-value = 2.808e-15
+Moran I statistic standard deviate = 25.182, p-value &lt; 2.2e-16
 alternative hypothesis: greater
 sample estimates:
 Moran I statistic       Expectation          Variance 
-     0.1753148604     -0.0014662757      0.0005120523 </code></pre>
+     0.5546303953     -0.0013157895      0.0004873895 </code></pre>
 </div>
 </div>
-<p>The positive Moran’s I value of 0.1753 and low p-value of &lt; 0.05 suggest that there is clustering and positive spatial autocorrelation of the functional-to-non-functional ratio of the water points among the LGAs, and the null hypothesis of spatial randomness is rejected.</p>
+<p>The positive Moran’s I value of 0.5546 and low p-value of &lt; 0.05 suggest that there is clustering and positive spatial autocorrelation of the proportion of functional water points among the LGAs, and the null hypothesis of spatial randomness is rejected.</p>
+</section>
+<section id="computing-local-morans-i" class="level3">
+<h3 class="anchored" data-anchor-id="computing-local-morans-i">Computing Local Moran’s I</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fips <span class="ot">&lt;-</span> <span class="fu">order</span>(wp_nigeria<span class="sc">$</span>shapeName)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>localMI <span class="ot">&lt;-</span> <span class="fu">localmoran</span>(wp_nigeria<span class="sc">$</span><span class="st">`</span><span class="at">Functional %</span><span class="st">`</span>, rswm_q, <span class="at">zero.policy =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">na.action =</span> na.exclude)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(localMI)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Ii          E.Ii      Var.Ii       Z.Ii Pr(z != E(Ii))
+1  0.49092488 -2.159064e-04 0.040905010  2.4283861     0.01516619
+2  0.47705254 -2.312021e-04 0.058480195  1.9736595     0.04842047
+3          NA            NA          NA         NA             NA
+4 -0.05227041 -2.549836e-04 0.027494215 -0.3136978     0.75375056
+5  0.08398647 -1.839603e-05 0.002785069  1.5917925     0.11143133
+6  0.56999167 -5.726499e-04 0.061727722  2.2964896     0.02164790</code></pre>
+</div>
+</div>
 
 
 </section>

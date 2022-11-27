@@ -202,9 +202,3 @@ localMI <- localmoran(wp_nigeria$`Functional %`, rswm_q, zero.policy = TRUE,
                       na.action = na.exclude)
 head(localMI)
 ```
-
-```{r}
-printCoefmat(data.frame(localMI[fips,], 
-                        row.names = wp_nigeria$shapeName[fips]), 
-             check.names = FALSE)
-```
