@@ -165,8 +165,6 @@ write_rds(nga_wp, "data/rds/nga_wp.rds")
 ## Visualizing the Spatial Distribution of Water Points
 
 ```{r}
-#| fig-width: 14
-#| fig-height: 12
 nga_wp <- read_rds("data/rds/nga_wp.rds")
 total <- qtm(nga_wp, "total wpt") + 
   tm_layout(legend.outside = TRUE)

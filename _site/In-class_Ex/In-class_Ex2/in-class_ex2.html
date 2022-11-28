@@ -417,8 +417,12 @@ Geodetic CRS:  WGS 84</code></pre>
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">legend.outside =</span> <span class="cn">TRUE</span>, <span class="at">legend.format =</span> <span class="fu">list</span>(<span class="at">fun=</span><span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">formatC</span>(x <span class="sc">*</span> <span class="dv">100</span>, <span class="at">digits=</span><span class="dv">0</span>, <span class="at">format=</span><span class="st">"f"</span>), <span class="st">" %"</span>)))</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, <span class="at">ncol=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Some legend labels were too wide. These labels have been resized to 0.64, 0.64, 0.64, 0.58. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.
+Some legend labels were too wide. These labels have been resized to 0.64, 0.64, 0.64, 0.58. Increase legend.width (argument of tm_layout) to make the legend wider and therefore the labels larger.</code></pre>
+</div>
 <div class="cell-output-display">
-<p><img src="in-class_ex2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="1344"></p>
+<p><img src="in-class_ex2_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>From the above maps, it appears that the northern regions of Nigeria tend to enjoy both a higher count as well as percentage of functional water points, while the central and southern regions suffer a higher count and percentage of non-functional ones.</p>

@@ -44,16 +44,17 @@ plot(nigeria_sf)
 glimpse(nigeria_sf)
 ```
 
-#### Transforming to EPSG 26391 Map Projection
+#### Transforming to EPSG 26393 Map Projection
 
 ```{r}
-nigeria26391 <- st_transform(nigeria_sf, crs = 26391)
-nigeria26391
+nigeria26393 <- st_transform(nigeria_sf, crs = 26393)
+nigeria26393
 ```
 
 ### Importing Water Points Aspatial Data
 
 ```{r}
+#| eval: false
 nigeria_csv <- read_csv("data/WPdx+/Water_Point_Data_Exchange_-_Plus__WPdx__.csv") %>%
   filter(`#clean_country_name` == "Nigeria")
 ```
@@ -61,10 +62,11 @@ nigeria_csv <- read_csv("data/WPdx+/Water_Point_Data_Exchange_-_Plus__WPdx__.csv
 #### Converting to simple feature data frame and transforming to same map projection
 
 ```{r}
+#| eval: false
 nigeria_wp_sf <- st_as_sf(nigeria_csv, 
                           coords = c("#lon_deg", "#lat_deg"),
                           crs = 4326) %>%
-  st_transform(crs = 26391)
+  st_transform(crs = 26393)
 ```
 
 ## Data Wrangling
@@ -74,6 +76,7 @@ nigeria_wp_sf <- st_as_sf(nigeria_csv,
 Recoding all NA values in *#status_clean* column into "Unknown":
 
 ```{r}
+#| eval: false
 nigeria_wp <- nigeria_wp_sf %>%
   mutate(`#status_clean` = replace_na(`#status_clean`, "Unknown"))
 ```
@@ -83,6 +86,7 @@ nigeria_wp <- nigeria_wp_sf %>%
 Listing all values in *#status_clean* column:
 
 ```{r}
+#| eval: false
 freq(data = nigeria_wp, input = "#status_clean")
 ```
 
@@ -91,6 +95,7 @@ freq(data = nigeria_wp, input = "#status_clean")
 ### Extracting functional water points
 
 ```{r}
+#| eval: false
 wp_functional <- nigeria_wp %>%
   filter(`#status_clean` %in% c("Functional", 
                                 "Functional but needs repair",
@@ -100,6 +105,7 @@ wp_functional <- nigeria_wp %>%
 ### Extracting non-functional water points
 
 ```{r}
+#| eval: false
 wp_nonfunctional <- nigeria_wp %>%
   filter(`#status_clean` %in% c("Non-Functional", 
                                 "Non-Functional due to dry season",
@@ -111,6 +117,7 @@ wp_nonfunctional <- nigeria_wp %>%
 ### Extracting water points with Unknown class
 
 ```{r}
+#| eval: false
 wp_unknown <- nigeria_wp %>%
   filter(`#status_clean` == "Unknown")
 ```
@@ -118,20 +125,25 @@ wp_unknown <- nigeria_wp %>%
 ## Performing Point-in-Polygon Count
 
 ```{r}
-wp_nigeria <- nigeria26391 %>% 
+#| eval: false
+wp_nigeria <- nigeria26393 %>% 
   mutate(`Total water points` = lengths(
-    st_intersects(nigeria26391, nigeria_wp))) %>%
+    st_intersects(nigeria26393, nigeria_wp))) %>%
   mutate(`Functional status` = lengths(
-    st_intersects(nigeria26391, wp_functional))) %>%
+    st_intersects(nigeria26393, wp_functional))) %>%
   mutate(`Non-functional status` = lengths(
-    st_intersects(nigeria26391, wp_nonfunctional))) %>%
+    st_intersects(nigeria26393, wp_nonfunctional))) %>%
   mutate(`Unknown status` = lengths(
-    st_intersects(nigeria26391, wp_unknown))) %>%
-  mutate(`Functional %` = `Functional status` / `Total water points`) %>%
-  mutate(`Non-functional %` = `Non-functional status` / `Total water points`)
+    st_intersects(nigeria26393, wp_unknown))) %>%
+  mutate(`Functional %` = ifelse(`Total water points` > 0,
+                                 `Functional status` / `Total water points`,
+                                 0)) %>%
+  mutate(`Non-functional %` = ifelse(`Total water points` > 0,
+                                     `Non-functional status` / `Total water points`, 0))
 ```
 
 ```{r}
+#| eval: false
 wp_nigeria
 ```
 
@@ -140,65 +152,417 @@ wp_nigeria
 The data derived above is saved as a RDS file for subsequent geospatial analysis of the water points:
 
 ```{r}
+#| eval: false
 write_rds(wp_nigeria, "data/rds/wp_nigeria.rds")
 ```
 
 ## Visualizing the Spatial Distribution of Water Points
 
 ```{r}
-#| fig-width: 14
-#| fig-height: 12
 wp_nigeria <- read_rds("data/rds/wp_nigeria.rds")
+
 total <- qtm(wp_nigeria, "Total water points", fill.palette = "Purples") + 
-  tm_layout(legend.outside = TRUE)
+  tm_layout(main.title = "Total Water Points", 
+            main.title.size = 1.1,
+            legend.outside = TRUE)
+
 wp_functional <- qtm(wp_nigeria, "Functional status", fill.palette = "Blues") + 
-  tm_layout(legend.outside = TRUE)
+  tm_layout(main.title = "Functional Water Points", 
+            main.title.size = 1.1,
+            legend.outside = TRUE)
+
 wp_nonfunctional <- qtm(wp_nigeria, "Non-functional status", fill.palette = "Oranges") + 
-  tm_layout(legend.outside = TRUE)
+  tm_layout(main.title = "Non-functional Water Points", 
+            main.title.size = 1.1,
+            legend.outside = TRUE)
+
 unknown <- qtm(wp_nigeria, "Unknown status", fill.palette = "Greys") + 
-  tm_layout(legend.outside = TRUE)
+  tm_layout(main.title = "Water Points with Unknown Status", 
+            main.title.size = 1.0,
+            legend.outside = TRUE)
+
 pct_functional <- qtm(wp_nigeria, "Functional %", fill.palette = "Blues") + 
-  tm_layout(legend.outside = TRUE, legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
+  tm_layout(main.title = "% Functional Water Points", 
+            main.title.size = 1.1,
+            legend.outside = TRUE, 
+            legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
+
 pct_nonfunctional <- qtm(wp_nigeria, "Non-functional %", fill.palette = "Oranges") + 
-  tm_layout(legend.outside = TRUE, legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
+  tm_layout(main.title = "% Non-functional Water Points", 
+            main.title.size = 1.1,
+            legend.outside = TRUE, 
+            legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
 
 tmap_arrange(total, wp_functional, wp_nonfunctional, unknown, pct_functional, pct_nonfunctional, ncol=2)
 ```
 
 From the above maps, it appears that the northern regions of Nigeria tend to enjoy both a higher count as well as percentage of functional water points, while the central and southern regions suffer a higher count and percentage of non-functional ones.
 
+## Computing Distance-Based Neighbours
+
+### Finding Coordinates of LGA Polygon Centroids
+
+```{r}
+longitude <- map_dbl(wp_nigeria$geometry, ~st_centroid(.x)[[1]])
+latitude <- map_dbl(wp_nigeria$geometry, ~st_centroid(.x)[[2]])
+coords <- cbind(longitude, latitude)
+head(coords)
+```
+
+### Computing Adaptive Distance Weight Matrix
+
+We set k-nearest neighbours to 8 to find the 8 nearest neighbours of each LGA using adaptive distance method:
+
+```{r}
+knn <- knn2nb(knearneigh(coords, k = 8))
+knn
+```
+
+#### Inversed Distance Weight Matrix
+
+Deriving a spatial weight matrix based on Inversed Distance method:
+
+```{r}
+dist <- nbdists(knn, coords)
+ids <- lapply(dist, function(x) 1/(x/1000))
+```
+
+The distance is divided by 1000 to obtain the value in km.
+
+#### Row-Standardized Weight Matrix
+
+Row-standardizing the IDW calculated above:
+
+```{r}
+rswm_ids <- nb2listw(knn, glist=ids, style="B", zero.policy=TRUE)
+```
+
+```{r}
+summary(unlist(rswm_ids$weights))
+```
+
+## Computing Spatially Lagged Values of LGAs
+
+```{r}
+Functional_pct.lag <- lag.listw(rswm_ids, 
+                                wp_nigeria$`Functional %`, 
+                                zero.policy = TRUE)
+Functional_pct.lag
+```
+
 ## Cluster and Outlier Analysis
-
-### Computing Contiguity Spatial Weights
-
-```{r}
-wm_q <- poly2nb(wp_nigeria, queen = TRUE)
-summary(wm_q)
-```
-
-### Row-Standardized Weights Matrix
-
-```{r}
-rswm_q <- nb2listw(wm_q, style = "W", zero.policy = TRUE)
-print(rswm_q, zero.policy = TRUE)
-```
 
 ### Global Spatial Autocorrelation: Moran's I test
 
+#### Functional Water Points Proportion
+
 ```{r}
 moran.test(wp_nigeria$`Functional %`, 
-           listw = rswm_q, 
+           listw = rswm_ids, 
            zero.policy = TRUE, 
            na.action = na.omit)
 ```
 
-The positive Moran's I value of 0.5546 and low p-value of \< 0.05 suggest that there is clustering and positive spatial autocorrelation of the proportion of functional water points among the LGAs, and the null hypothesis of spatial randomness is rejected.
+The positive Moran's I value of 0.5469 and low p-value of \< 0.05 suggest that there is clustering and significant positive spatial autocorrelation of the proportion of functional water points among the LGAs, and the null hypothesis of spatial randomness is rejected.
+
+#### Non-functional Water Points Proportion
+
+```{r}
+moran.test(wp_nigeria$`Non-functional %`, 
+           listw = rswm_ids, 
+           zero.policy = TRUE, 
+           na.action = na.omit)
+```
+
+The positive Moran's I value of 0.4993 and low p-value of \< 0.05 suggest that there is also clustering and significant positive spatial autocorrelation of the proportion of non-functional water points among the LGAs, and the null hypothesis of spatial randomness is rejected.
 
 ### Computing Local Moran's I
 
+#### Functional Water Points Proportion
+
 ```{r}
-fips <- order(wp_nigeria$shapeName)
-localMI <- localmoran(wp_nigeria$`Functional %`, rswm_q, zero.policy = TRUE,
-                      na.action = na.exclude)
-head(localMI)
+localMI_F <- localmoran(wp_nigeria$`Functional %`, rswm_ids)
+head(localMI_F)
 ```
+
+#### Non-functional Water Points Proportion
+
+```{r}
+localMI_NF <- localmoran(wp_nigeria$`Non-functional %`, rswm_ids)
+head(localMI_NF)
+```
+
+#### Appending Local Moran's I to Nigeria Spatial Polygon DataFrame
+
+```{r}
+wp_nigeria.localMI_F <- cbind(wp_nigeria, localMI_F) %>%
+  rename(Pr.Ii = Pr.z....E.Ii..)
+```
+
+```{r}
+wp_nigeria.localMI_NF <- cbind(wp_nigeria, localMI_NF) %>%
+  rename(Pr.Ii = Pr.z....E.Ii..)
+```
+
+#### Mapping Local Moran's I values and p-values
+
+```{r}
+localMI_F.map <- tm_shape(wp_nigeria.localMI_F) +
+  tm_fill(col = "Ii", 
+          style = "pretty",
+          palette = "RdBu", 
+          title = "Local Moran's I") + 
+  tm_layout(main.title = "Local Moran's I statistics (Functional)", 
+            main.title.size = 1.1,
+            legend.outside = TRUE) +
+  tm_borders(alpha = 0.5)
+
+pvalue_F.map <- tm_shape(wp_nigeria.localMI_F) +
+  tm_fill(col = "Pr.Ii", 
+          breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
+          palette="-Blues", 
+          title = "P-values") + 
+  tm_layout(main.title = "Local Moran's I p-values (Functional)", 
+            main.title.size = 1.1,
+            legend.outside = TRUE) +
+  tm_borders(alpha = 0.5)
+
+localMI_NF.map <- tm_shape(wp_nigeria.localMI_NF) +
+  tm_fill(col = "Ii", 
+          style = "pretty",
+          palette = "-RdBu", 
+          title = "Local Moran's I") + 
+  tm_layout(main.title = "Local Moran's I statistics (Non-functional)", 
+            main.title.size = 1.0,
+            legend.outside = TRUE) +
+  tm_borders(alpha = 0.5)
+
+pvalue_NF.map <- tm_shape(wp_nigeria.localMI_NF) +
+  tm_fill(col = "Pr.Ii", 
+          breaks=c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
+          palette="-Oranges", 
+          title = "P-values") + 
+  tm_layout(main.title = "Local Moran's I p-values (Non-functional)", 
+            main.title.size = 1.0,
+            legend.outside = TRUE) +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(localMI_F.map, pvalue_F.map, localMI_NF.map, pvalue_NF.map, ncol=2)
+```
+
+The Local Moran's I and p-value maps show that there is statistically significant clustering of high proportion of functional water points in the northern regions of Nigeria. In the southern region, there is also statistical significance of spatial autocorrelation of non-functional water point presence.
+
+## Creating LISA Cluster Map
+
+### Plotting Moran Scatterplot
+
+#### Functional Water Points Proportion
+
+```{r}
+nci_F <- moran.plot(wp_nigeria$`Functional %`, rswm_ids,
+                  labels = as.character(wp_nigeria$shapeName), 
+                  xlab="% Functional", 
+                  ylab="Spatially Lag % Functional")
+```
+
+#### Non-functional Water Points Proportion
+
+```{r}
+nci_NF <- moran.plot(wp_nigeria$`Non-functional %`, rswm_ids,
+                  labels = as.character(wp_nigeria$shapeName), 
+                  xlab="% Non-functional", 
+                  ylab="Spatially Lag % Non-functional")
+```
+
+### Plotting Moran Scatterplot with Standardized Variable
+
+#### Functional Water Points Proportion
+
+```{r}
+wp_nigeria$`Z.Functional %` <- scale(wp_nigeria$`Functional %`) %>% 
+  as.vector 
+```
+
+```{r}
+nci_F2 <- moran.plot(wp_nigeria$`Functional %`, rswm_ids,
+                   labels = as.character(wp_nigeria$shapeName),
+                   xlab = "z-% Functional", 
+                   ylab="Spatially Lag z-% Functional")
+```
+
+#### Non-functional Water Points Proportion
+
+```{r}
+wp_nigeria$`Z.Non-functional %` <- scale(wp_nigeria$`Non-functional %`) %>% 
+  as.vector 
+```
+
+```{r}
+nci_NF2 <- moran.plot(wp_nigeria$`Non-functional %`, rswm_ids,
+                   labels = as.character(wp_nigeria$shapeName),
+                   xlab = "z-% Non-functional", 
+                   ylab="Spatially Lag z-% Non-functional")
+```
+
+### Preparing LISA Map Classes
+
+#### Functional Water Points Proportion
+
+```{r}
+quadrant_F <- vector(mode = "numeric", length = nrow(localMI_F))
+wp_nigeria$`lag_Functional %` <- lag.listw(rswm_ids, wp_nigeria$`Functional %`)
+DV_F <- wp_nigeria$`lag_Functional %` - mean(wp_nigeria$`lag_Functional %`)
+LM_I_F <- localMI_F[,1]   
+signif <- 0.05       
+quadrant_F[DV_F < 0 & LM_I_F > 0] <- 1
+quadrant_F[DV_F > 0 & LM_I_F < 0] <- 2
+quadrant_F[DV_F < 0 & LM_I_F < 0] <- 3  
+quadrant_F[DV_F > 0 & LM_I_F > 0] <- 4    
+quadrant_F[localMI_F[,5] > signif] <- 0
+```
+
+#### Non-functional Water Points Proportion
+
+```{r}
+quadrant_NF <- vector(mode = "numeric", length = nrow(localMI_NF))
+wp_nigeria$`lag_Non-functional %` <- lag.listw(rswm_ids, wp_nigeria$`Non-functional %`)
+DV_NF <- wp_nigeria$`lag_Non-functional %` - mean(wp_nigeria$`lag_Non-functional %`)
+LM_I_NF <- localMI_NF[,1]   
+signif <- 0.05       
+quadrant_NF[DV_NF < 0 & LM_I_NF > 0] <- 1
+quadrant_NF[DV_NF > 0 & LM_I_NF < 0] <- 2
+quadrant_NF[DV_NF < 0 & LM_I_NF < 0] <- 3  
+quadrant_NF[DV_NF > 0 & LM_I_NF > 0] <- 4    
+quadrant_NF[localMI_NF[,5] > signif] <- 0
+```
+
+### Plotting LISA Map
+
+#### Functional Water Points Proportion
+
+```{r}
+pct_functional <- qtm(wp_nigeria, "Functional %", fill.palette = "Blues") + 
+  tm_layout(main.title = "% Functional Water Points", 
+            main.title.size = 1.1,
+            legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
+
+wp_nigeria.localMI_F$quadrant <- quadrant_F
+colors_F <- c("#ffffff", "#d7191c", "#fdae61", "#abd9e9", "#2c7bb6")
+clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
+
+LISAmap_F <- tm_shape(wp_nigeria.localMI_F) +
+  tm_fill(col = "quadrant", 
+          style = "cat", 
+          palette = colors_F[c(sort(unique(quadrant_F))) + 1], 
+          labels = clusters[c(sort(unique(quadrant_F))) + 1],
+          popup.vars = c("")) +
+  tm_view(set.zoom.limits = c(11, 17)) +
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "LISA Map", 
+            main.title.size = 1.1)
+
+tmap_arrange(pct_functional, LISAmap_F, ncol = 2)
+```
+
+The LISA map reveals a statistically significant cluster of LGAs with high proportion of functional water points in the northern region.
+
+#### Non-functional Water Points Proportion
+
+```{r}
+pct_nonfunctional <- qtm(wp_nigeria, "Non-functional %", fill.palette = "Oranges") + 
+  tm_layout(main.title = "% Non-functional Water Points", 
+            main.title.size = 1.1,
+            legend.format = list(fun=function(x) paste0(formatC(x * 100, digits=0, format="f"), " %")))
+
+wp_nigeria.localMI_NF$quadrant <- quadrant_NF
+colors_NF <- c("#ffffff", "#2c7bb6", "#abd9e9", "#fdae61", "#d7191c")
+clusters <- c("insignificant", "low-low", "low-high", "high-low", "high-high")
+
+LISAmap_NF <- tm_shape(wp_nigeria.localMI_NF) +
+  tm_fill(col = "quadrant", 
+          style = "cat", 
+          palette = colors_NF[c(sort(unique(quadrant_NF))) + 1], 
+          labels = clusters[c(sort(unique(quadrant_NF))) + 1],
+          popup.vars = c("")) +
+  tm_view(set.zoom.limits = c(11, 17)) +
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "LISA Map", 
+            main.title.size = 1.1)
+
+tmap_arrange(pct_nonfunctional, LISAmap_NF, ncol = 2)
+```
+
+The LISA map reveals a statistically significant cluster of LGAs with high proportion of non-functional water points in the southwestern region.
+
+The northeastern region appears as low-low quadrant in both functional and non-functional maps, indicating that this region has a low count of water points overall.
+
+## Hot Spot and Cold Spot Area Analysis
+
+### Computing Adaptive Distance Weight Matrix
+
+Continuing from the *knn* variable derived earlier above, we convert the nb object into a spatial weights object:
+
+```{r}
+knn_lw <- nb2listw(knn, style = 'B')
+summary(knn_lw)
+```
+
+### Computing Gi Statistics
+
+#### Functional Water Points Proportion
+
+```{r}
+gi_F <- localG(wp_nigeria$`Functional %`, knn_lw)
+wp_nigeria.gi_F <- cbind(wp_nigeria, as.matrix(gi_F)) %>%
+  rename(gstat_F = as.matrix.gi_F.)
+```
+
+#### Non-functional Water Points Proportion
+
+```{r}
+gi_NF <- localG(wp_nigeria$`Non-functional %`, knn_lw)
+wp_nigeria.gi_NF <- cbind(wp_nigeria, as.matrix(gi_NF)) %>%
+  rename(gstat_NF = as.matrix.gi_NF.)
+```
+
+### Mapping Gi Values with Adaptive Distance Weights
+
+#### Functional Water Points Proportion
+
+```{r}
+Gimap_F <- tm_shape(wp_nigeria.gi_F) + 
+  tm_fill(col = "gstat_F", 
+          style = "pretty", 
+          palette="RdBu", 
+          title = "Local Gi") + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "Local Gi", 
+            main.title.size = 1.1)
+
+tmap_arrange(pct_functional, 
+             Gimap_F, 
+             ncol=2)
+```
+
+The local Gi map reveals the hot spot area for high proportion of functional water points in the northern region, in line with the earlier maps' revelation. The cold spot areas appear in the southern and northeastern regions, indicating a clustering of low proportion of functional water points in those areas.
+
+#### Non-functional Water Points Proportion
+
+```{r}
+Gimap_NF <- tm_shape(wp_nigeria.gi_NF) + 
+  tm_fill(col = "gstat_NF", 
+          style = "pretty", 
+          palette="-RdBu", 
+          title = "Local Gi") + 
+  tm_borders(alpha = 0.5) +
+  tm_layout(main.title = "Local Gi", 
+            main.title.size = 1.1)
+
+tmap_arrange(pct_nonfunctional, 
+             Gimap_NF, 
+             ncol=2)
+```
+
+The local Gi map reveals the hot spot area for high proportion of non-functional water points in the southwestern region, in line with the earlier maps' revelation.
+
+The cold spot area appears in the northeastern region, which was also the cold spot area for functional water points. This indicates that the area is a clustering of low counts of water points overall.
