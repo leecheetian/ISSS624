@@ -8,9 +8,9 @@ Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
 
 1.  Hands-on Exercises
 
-    i)  [Hands-on Exercise 1a](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1a.qmd)
-    ii) [Hands-on Exercise 1b](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1b.qmd)
-    iii) [Hands-on Exercise 2](Hands-on_Ex/Hands-on_Ex2/hands-on_ex2.qmd)
+    i)  [Hands-on Exercise 1a](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1a.qmd) :- [**Geospatial Data Wrangling with R**](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1a.qmd)
+    ii) [Hands-on Exercise 1b](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1b.qmd) :- [**Choropleth Mapping with R**](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1b.qmd)
+    iii) [Hands-on Exercise 2](Hands-on_Ex/Hands-on_Ex2/hands-on_ex2.qmd) :- [**Global and Local Measures of Spatial Autocorrelation**](Hands-on_Ex/Hands-on_Ex2/hands-on_ex2.qmd)
 
 2.  In-class Exercises
 
@@ -19,4 +19,4 @@ Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
 
 3.  Take-home Exercises
 
-    i.  [Take-home Exercise 1](Take-home_Ex/Take-home_Ex1/take-home_ex1.qmd)
+    i.  [Take-home Exercise 1](Take-home_Ex/Take-home_Ex1/take-home_ex1.qmd) :- [**Geospatial Analytics for Social Good**](Take-home_Ex/Take-home_Ex1/take-home_ex1.qmd)
