@@ -13,6 +13,8 @@ website:
             href: Hands-on_Ex/Hands-on_Ex1/hands-on_ex1b.qmd
           - text: Hands-on Exercise 2
             href: Hands-on_Ex/Hands-on_Ex2/hands-on_ex2.qmd
+          - text: Hands-on Exercise 3
+            href: Hands-on_Ex/Hands-on_Ex3/hands-on_ex3.qmd
       - text: In-class Exercises
         menu: 
           - text: In-class Exercise 1
