@@ -39,7 +39,6 @@ The R packages needed for this hands-on exercise include:
     -   **coorplot**, **ggpubr**, and **heatmaply**
 -   Cluster analysis
     -   **cluster**
-
     -   **ClustGeo**
 
 ```{r}
@@ -238,13 +237,13 @@ tm_shape(shan_sf) +
     tm_polygons(c("TT_HOUSEHOLDS", "RADIO_PR"),
                 style = "jenks") +
     tm_facets(sync = TRUE, ncol = 2) +
-  tm_legend(legend.position = c("right", "bottom"))+
+  tm_legend(legend.position = c("right", "bottom")) +
   tm_layout(outer.margins = 0, asp = 0)
 ```
 
 ## Correlation Analysis
 
-To eliminate cluster variables that are highly correlated, so that they do not combine to overwhelm the subsequent cluster analysis process:
+To eliminate cluster variables that are highly correlated, so that they do not combine and overweight one aspect in the subsequent cluster analysis process:
 
 ```{r}
 cluster_vars.cor = cor(ict_derived[,12:17])
@@ -256,7 +255,7 @@ corrplot.mixed(cluster_vars.cor,
                tl.col = "black")
 ```
 
-The COMPUTER_PR and INTERNET_PR variables are found to be highly correlated, hence only one of them should be used in the subsequent cluster analysis step.
+The COMPUTER_PR and INTERNET_PR variables are found to be highly correlated (correlation coefficient \> 0.85), hence only one of them should be used in the subsequent cluster analysis step. COMPUTER_PR will be retained while INTERNET_PR will be dropped.
 
 ## Hierarchy Cluster Analysis
 
@@ -287,21 +286,33 @@ head(shan_ict, 10)
 
 ### Data Standardization
 
+To standardize the value ranges of the various clustering variables so that the cluster analysis result will not end up being biased to those with large values.
+
 #### Min-Max standardization
+
+Min-Max standardization of clustering variables using *normalize()* function of **heatmaply** package:
 
 ```{r}
 shan_ict.std <- normalize(shan_ict)
 summary(shan_ict.std)
 ```
 
+All clustering variables are standardized to value ranges between 0 and 1.
+
 #### Z-score standardization
+
+Z-score standardization of clustering variables using *scale()* function in R:
 
 ```{r}
 shan_ict.z <- scale(shan_ict)
 describe(shan_ict.z)
 ```
 
+Mean and standard deviation of all clustering variables are standardized to 0 and 1 respectively.
+
 ### Visualizing the standardized cluster variables
+
+Visualizing the effect of standardization on the RADIO_PR variable:
 
 ```{r}
 r <- ggplot(data = ict_derived, 
@@ -335,12 +346,16 @@ ggarrange(r, s, z,
 
 ### Computing proximity matrix
 
+Calculating distance matrix with euclidean method using *dist()* function in R:
+
 ```{r}
 proxmat <- dist(shan_ict, method = 'euclidean')
 proxmat
 ```
 
 ### Computing hierarchical clustering
+
+Performing hierarchical cluster analysis with ward.D method using *hclust()* function in R:
 
 ```{r}
 hclust_ward <- hclust(proxmat, method = 'ward.D')
@@ -351,6 +366,8 @@ plot(hclust_ward, cex = 0.6)
 ```
 
 ### Selecting the optimal clustering algorithm
+
+Finding the agglomerative coefficients of all hierarchical clustering algorithms using *agnes()* function of **cluster** package:
 
 ```{r}
 m <- c("average", "single", "complete", "ward")
@@ -363,9 +380,13 @@ ac <- function(x) {
 map_dbl(m, ac)
 ```
 
+The Ward's method is found to provide the strongest clustering structure among the four methods assessed. Hence, in the subsequent clustering analysis, only this method will be used.
+
 ### Determining optimal clusters
 
 #### Gap Statistic Method
+
+Calculating gap statistic of various numbers of clusters using *clusGap()* function of **cluster** package:
 
 ```{r}
 set.seed(12345)
@@ -382,9 +403,11 @@ print(gap_stat, method = "firstmax")
 fviz_gap_stat(gap_stat)
 ```
 
-From the gap statistic graph above, disregarding the option of having a single cluster for all observations, the 6-cluster appears to give the largest gap statistic and therefore should be the best cluster number to pick.
+From the gap statistic graph above, disregarding the option of having a single cluster for all observations, the 6-cluster structure appears to give the largest gap statistic and therefore should be the best cluster number to pick.
 
 ### Interpreting the dendrograms
+
+Identifying the townships that form the 6 clusters using the *rect.hclust()* function in R stats:
 
 ```{r}
 plot(hclust_ward, cex = 0.6)
@@ -395,13 +418,19 @@ rect.hclust(hclust_ward,
 
 ### Visually-driven hierarchical clustering analysis
 
+Using the **heatmaply** package to build a hierarchical cluster heatmap. It can be set to either interactive or static.
+
 #### Transforming the data frame into a matrix
+
+Transforming the *shan_ict* data frame into a data matrix:
 
 ```{r}
 shan_ict_mat <- data.matrix(shan_ict)
 ```
 
 #### Plotting interactive cluster heatmap using *heatmaply()*
+
+Using the *heatmaply()* function of **heatmaply** package to build an interactive cluster heatmap:
 
 ```{r}
 heatmaply(normalize(shan_ict_mat),
@@ -422,14 +451,20 @@ heatmaply(normalize(shan_ict_mat),
 
 ### Mapping the clusters formed
 
+Using the *cutree()* function in R to derive a 6-cluster model:
+
 ```{r}
 groups <- as.factor(cutree(hclust_ward, k = 6))
 ```
+
+Converting *groups* list object into matrix, and appending to *shan_sf* simple feature object using *cbind()* function:
 
 ```{r}
 shan_sf_cluster <- cbind(shan_sf, as.matrix(groups)) %>%
   rename(`CLUSTER` = `as.matrix.groups.`)
 ```
+
+Using the *qtm()* function of **tmap** package to plot choropleth map showing the 6 clusters formed:
 
 ```{r}
 qtm(shan_sf_cluster, "CLUSTER")
@@ -439,7 +474,11 @@ The clusters formed in the choropleth map above appear very fragmented. This is 
 
 ## Spatially Constrained Clustering - SKATER approach
 
+Using the *skater()* method of **spdep** package to derive spatially constrained clusters.
+
 ### Converting into SpatialPolygonsDataFrame
+
+Using the *as_Spatial()* function of **sf** package to convert *shan_sf* into a SpatialPolygonDataFrame object:
 
 ```{r}
 shan_sp <- as_Spatial(shan_sf)
@@ -447,14 +486,19 @@ shan_sp <- as_Spatial(shan_sf)
 
 ### Computing neighbour list
 
+Using the *poly2nb()* function of **spdep** package to compute the neighbours list from the polygon list:
+
 ```{r}
 shan.nb <- poly2nb(shan_sp)
 summary(shan.nb)
 ```
 
+Plotting the neighbours list on top of the Shan State township boundaries map:
+
 ```{r}
 plot(shan_sp, 
      border=grey(.5))
+
 plot(shan.nb, 
      coordinates(shan_sp), 
      col = "blue", 
@@ -465,9 +509,13 @@ plot(shan.nb,
 
 #### Calculating edge costs
 
+Using the *nbcosts()* function of **spdep** package to calculate the cost of each edge, ie. the distance between its nodes:
+
 ```{r}
 lcosts <- nbcosts(shan.nb, shan_ict)
 ```
+
+Deriving weights list from the above costs using the *nb2listw()* function of **spdep** package:
 
 ```{r}
 shan.w <- nb2listw(shan.nb, 
@@ -478,9 +526,13 @@ summary(shan.w)
 
 #### Computing minimum spanning tree
 
+Deriving the minimum spanning tree using the *mstree()* function of **spdep** package:
+
 ```{r}
 shan.mst <- mstree(shan.w)
 ```
+
+Checking the class, dimension and content of the minimum spanning tree object:
 
 ```{r}
 class(shan.mst)
@@ -494,8 +546,11 @@ dim(shan.mst)
 head(shan.mst)
 ```
 
+Plotting the minimum spanning tree over the township boundaries map:
+
 ```{r}
 plot(shan_sp, border = gray(.5))
+
 plot.mst(shan.mst, 
          coordinates(shan_sp), 
          col = "blue", 
@@ -504,18 +559,26 @@ plot.mst(shan.mst,
          add = TRUE)
 ```
 
+The initial neighbours list from above has been simplified to just one edge connecting each of the nodes, while passing through all the nodes.
+
 ### Computing spatially constrained clusters using SKATER method
 
+Computing the spatially constrained clusters using the *skater()* function of **spdep** package:
+
 ```{r}
-clust6 <- skater(edges = shan.mst[,1:2], 
+clust6 <- skater(edges = shan.mst[, 1:2], 
                  data = shan_ict, 
                  method = "euclidean", 
                  ncuts = 5)
 ```
 
+Examining the contents of the skater object:
+
 ```{r}
 str(clust6)
 ```
+
+Checking the cluster assignment of the townships:
 
 ```{r}
 ccs6 <- clust6$groups
@@ -526,16 +589,21 @@ ccs6
 table(ccs6)
 ```
 
+Plotting the pruned tree that shows the clusters over the township boundaries map:
+
 ```{r}
 plot(clust6, 
      coordinates(shan_sp), 
      cex.lab = 0.7,
      groups.colors = c("red", "green", "blue", "brown", "pink", "purple"),
      cex.circles = 0.005)
+
 plot(shan_sp, border = gray(.5), add = TRUE)
 ```
 
 ### Visualizing the clusters in choropleth map
+
+Plotting the spatially constrained clusters derived using SKATER in a choropleth map:
 
 ```{r}
 groups_mat <- as.matrix(clust6$groups)
@@ -543,6 +611,8 @@ shan_sf_spatialcluster <- cbind(shan_sf_cluster, as.factor(groups_mat)) %>%
   rename(`SP_CLUSTER`=`as.factor.groups_mat.`)
 qtm(shan_sf_spatialcluster, "SP_CLUSTER")
 ```
+
+Comparing the hierarchical clustering and spatially constrained hierarchical clustering maps side by side:
 
 ```{r}
 hclust.map <- qtm(shan_sf_cluster,
