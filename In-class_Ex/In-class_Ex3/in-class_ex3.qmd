@@ -220,4 +220,4 @@ tmap_arrange(hclust.map, shclust.map,
 
 The spatially constrained clusters on the right appear less fragmented than the unconstrained hierarchical clusters on the left, though not as well organized as the clusters formed by the SKATER method in Hands-on Exercise 3.
 
-This is because the ClustGeo method tries to balance both the attribute and spatial homogeneity, while the SKATER method only considers the spatial homogeneity only.
+This is because the ClustGeo method tries to balance both the attribute and spatial homogeneity by applying a soft spatial constraint during clustering, while the SKATER method places a much higher emphasis on the spatial homogeneity at the expense of the attribute homogeneity, by applying a hard spatial constraint.
