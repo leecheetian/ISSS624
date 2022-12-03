@@ -1,0 +1,223 @@
+---
+title: "In-class Exercise 3"
+author: "Lee Chee Tian"
+editor: visual
+---
+
+# Geographical Segmentation with Spatially Constrained Clustering Techniques
+
+## Overview
+
+This in-class exercise is an extension of [Hands-on Exercise 3](../../Hands-on_Ex/Hands-on_Ex3/hands-on_ex3.qmd). It explores a second method for performing spatially constrained cluster analysis - using the **ClustGeo** package.
+
+## Getting Started
+
+### Installing and Loading R Packages
+
+Installing and loading the same R packages as in Hands-on Exercise 3, especially the **ClustGeo** package:
+
+```{r}
+pacman::p_load(rgdal, spdep, tmap, sf, ggpubr, cluster, 
+               factoextra, NbClust, heatmaply, corrplot, 
+               psych, tidyverse, ClustGeo)
+```
+
+## Data Import and Prepatation
+
+### Importing geospatial data into R environment
+
+Importing the same geospatial data of Myanmar township boundary information as Hands-on Exercise 3:
+
+```{r}
+shan_sf <- st_read(dsn = "data/geospatial", 
+                   layer = "myanmar_township_boundaries") %>%
+  filter(ST %in% c("Shan (East)", "Shan (North)", "Shan (South)"))
+```
+
+```{r}
+shan_sf
+```
+
+```{r}
+glimpse(shan_sf)
+```
+
+### Importing aspatial data into R environment
+
+Importing the same aspatial data of Shan State infocomm information as Hands-on Exercise 3:
+
+```{r}
+ict <- read_csv ("data/aspatial/Shan-ICT.csv")
+```
+
+```{r}
+summary(ict)
+```
+
+### Deriving new variables using *dplyr* package
+
+```{r}
+ict_derived <- ict %>%
+  mutate(`RADIO_PR` = `Radio`/`Total households`*1000) %>%
+  mutate(`TV_PR` = `Television`/`Total households`*1000) %>%
+  mutate(`LLPHONE_PR` = `Land line phone`/`Total households`*1000) %>%
+  mutate(`MPHONE_PR` = `Mobile phone`/`Total households`*1000) %>%
+  mutate(`COMPUTER_PR` = `Computer`/`Total households`*1000) %>%
+  mutate(`INTERNET_PR` = `Internet at home`/`Total households`*1000) %>%
+  rename(`DT_PCODE` =`District Pcode`,`DT`=`District Name`,
+         `TS_PCODE`=`Township Pcode`, `TS`=`Township Name`,
+         `TT_HOUSEHOLDS`=`Total households`,
+         `RADIO`=`Radio`, `TV`=`Television`, 
+         `LLPHONE`=`Land line phone`, `MPHONE`=`Mobile phone`,
+         `COMPUTER`=`Computer`, `INTERNET`=`Internet at home`) 
+```
+
+```{r}
+summary(ict_derived)
+```
+
+### Joining geospatial data with aspatial data
+
+```{r}
+shan_sf <- left_join(shan_sf, 
+                     ict_derived, 
+                     by = c("TS_PCODE" = "TS_PCODE"))
+write_rds(shan_sf, "data/rds/shan_sf.rds")
+```
+
+## Hierarchical Cluster Analysis
+
+### Extracting clustering variables
+
+Extracting clustering variables from the *shan_sf* simple feature object into data.frame:
+
+```{r}
+cluster_vars <- shan_sf %>%
+  st_set_geometry(NULL) %>%
+  select("TS.x", "RADIO_PR", "TV_PR", "LLPHONE_PR", "MPHONE_PR", "COMPUTER_PR")
+head(cluster_vars, 10)
+```
+
+Changing the rows by township name instead of row number:
+
+```{r}
+row.names(cluster_vars) <- cluster_vars$"TS.x"
+head(cluster_vars, 10)
+```
+
+Deleting the TS.x column:
+
+```{r}
+shan_ict <- select(cluster_vars, c(2:6))
+head(shan_ict, 10)
+```
+
+### Computing proximity matrix
+
+Calculating distance matrix with euclidean method using *dist()* function in R:
+
+```{r}
+proxmat <- dist(shan_ict, method = 'euclidean')
+proxmat
+```
+
+## Spatially Constrained Clustering - ClustGeo approach
+
+Using the **ClustGeo** package to derive spatially constrained clusters.
+
+### Ward-like hierarchical clustering: ClustGeo
+
+Performing non-spatially constrained hierarchical clustering using *hclustgeo()* function of **ClustGeo** package, based on same number of clusters (6) as determined in Hands-on Exercise 3:
+
+```{r}
+nongeo_cluster <- hclustgeo(proxmat)
+plot(nongeo_cluster, cex = 0.5)
+rect.hclust(nongeo_cluster, 
+            k = 6, 
+            border = 2:5)
+```
+
+#### Mapping the clusters formed
+
+Using the *cutree()* function in R to derive a 6-cluster model:
+
+```{r}
+groups <- as.factor(cutree(nongeo_cluster, k = 6))
+```
+
+Converting *groups* list object into matrix, and appending to *shan_sf* simple feature object using *cbind()* function:
+
+```{r}
+shan_sf_ngeo_cluster <- cbind(shan_sf, as.matrix(groups)) %>%
+  rename(`CLUSTER` = `as.matrix.groups.`)
+```
+
+Using the *qtm()* function of **tmap** package to plot choropleth map showing the 6 clusters formed:
+
+```{r}
+qtm(shan_sf_ngeo_cluster, "CLUSTER")
+```
+
+### Spatially Constrained Hierarchical Clustering
+
+Using *st_distance()* of **sf** package to derive a spatial distance matrix.
+
+*as.dist()* function is used to convert the data frame into matrix:
+
+```{r}
+dist <- st_distance(shan_sf, shan_sf)
+distmat <- as.dist(dist)
+```
+
+Using *choicealpha()* function to determine a suitable value for the mixing parameter alpha:
+
+```{r}
+cr <- choicealpha(proxmat, distmat, 
+                  range.alpha = seq(0, 1, 0.1), 
+                  K = 6, 
+                  graph = TRUE)
+```
+
+We select alpha = 0.33 after evaluating the 2 graphs above:
+
+```{r}
+clustG <- hclustgeo(proxmat, distmat, alpha = 0.33)
+```
+
+Using the *cutree()* function to derive the cluster object:
+
+```{r}
+groups <- as.factor(cutree(clustG, k = 6))
+```
+
+Joining back the group list with *shan_sf* polygon feature data frame:
+
+```{r}
+shan_sf_Gcluster <- cbind(shan_sf, as.matrix(groups)) %>%
+  rename(`G_CLUSTER` = `as.matrix.groups.`)
+```
+
+Plotting the map of the newly delineated spatially constrained clusters:
+
+```{r}
+qtm(shan_sf_Gcluster, "G_CLUSTER")
+```
+
+Comparing the hierarchical clustering and spatially constrained hierarchical clustering maps side by side:
+
+```{r}
+hclust.map <- qtm(shan_sf_ngeo_cluster,
+                  "CLUSTER") + 
+  tm_borders(alpha = 0.5) 
+
+shclust.map <- qtm(shan_sf_Gcluster,
+                   "G_CLUSTER") + 
+  tm_borders(alpha = 0.5) 
+
+tmap_arrange(hclust.map, shclust.map,
+             asp = NA, ncol = 2)
+```
+
+The spatially constrained clusters on the right appear less fragmented than the unconstrained hierarchical clusters on the left, though not as well organized as the clusters formed by the SKATER method in Hands-on Exercise 3.
+
+This is because the ClustGeo method tries to balance both the attribute and spatial homogeneity, while the SKATER method only considers the spatial homogeneity only.

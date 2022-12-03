@@ -40,6 +40,8 @@ The R packages needed for this hands-on exercise include:
 -   Cluster analysis
     -   **cluster**
     -   **ClustGeo**
+-   Factor analysis
+    -   **factoextra**
 
 ```{r}
 pacman::p_load(rgdal, spdep, tmap, sf, ggpubr, cluster, 
@@ -259,7 +261,7 @@ The COMPUTER_PR and INTERNET_PR variables are found to be highly correlated (cor
 
 ## Hierarchy Cluster Analysis
 
-### Extrating cluster variables
+### Extracting cluster variables
 
 Extracting cluster variables from the *shan_sf* simple feature object into data.frame:
 
