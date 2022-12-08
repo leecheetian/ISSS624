@@ -22,3 +22,4 @@ Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
 3.  Take-home Exercises
 
     i.  [Take-home Exercise 1](Take-home_Ex/Take-home_Ex1/take-home_ex1.qmd) :- [**Geospatial Analytics for Social Good**](Take-home_Ex/Take-home_Ex1/take-home_ex1.qmd)
+    ii. [Take-home Exercise 2](Take-home_Ex/Take-home_Ex2/take-home_ex2.qmd) :- [**Regionalization of Multivariate Water Point Attributes with Non-spatially Constrained and Spatially Constrained Clustering Methods**](Take-home_Ex/Take-home_Ex2/take-home_ex2.qmd)
