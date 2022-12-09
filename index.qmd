@@ -12,6 +12,7 @@ Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
     ii) [Hands-on Exercise 1b](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1b.qmd) :- [**Choropleth Mapping with R**](Hands-on_Ex/Hands-on_Ex1/hands-on_ex1b.qmd)
     iii) [Hands-on Exercise 2](Hands-on_Ex/Hands-on_Ex2/hands-on_ex2.qmd) :- [**Global and Local Measures of Spatial Autocorrelation**](Hands-on_Ex/Hands-on_Ex2/hands-on_ex2.qmd)
     iv) [Hands-on Exercise 3](Hands-on_Ex/Hands-on_Ex3/hands-on_ex3.qmd) :- [**Geographical Segmentation with Spatially Constrained Clustering Techniques**](Hands-on_Ex/Hands-on_Ex3/hands-on_ex3.qmd)
+    v)  [Hands-on Exercise 4](Hands-on_Ex/Hands-on_Ex4/hands-on_ex4.qmd) :- [**Calibrating Hedonic Pricing Model for Private Highrise Property with GWR Method**](Hands-on_Ex/Hands-on_Ex4/hands-on_ex4.qmd)
 
 2.  In-class Exercises
 
