@@ -438,7 +438,7 @@ Then, *lm.morantest()* function is used to perform Moran's I test for residual s
 lm.morantest(condo.mlr1, nb_lw)
 ```
 
-The Global Moran\'s I test for residual spatial autocorrelation shows that its p-value is less than 0.00000000000000022, which is less than the alpha value of 0.05. Hence, we can reject the null hypothesis that the residuals are randomly distributed.
+The Global Moran's I test for residual spatial autocorrelation shows that its p-value is less than 0.00000000000000022, which is less than the alpha value of 0.05. Hence, we can reject the null hypothesis that the residuals are randomly distributed.
 
 Since the Observed Global Moran I = 0.1439 which is greater than 0, we can infer that the residuals resemble cluster distribution.
 
