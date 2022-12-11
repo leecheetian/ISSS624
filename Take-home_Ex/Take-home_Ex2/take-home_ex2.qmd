@@ -185,6 +185,8 @@ nigeria_wp <- nigeria_wp_sf %>%
 freq(data = nigeria_wp, input = "#status_clean")
 ```
 
+![](status_clean%20eda.png)
+
 We shall group the various values observed in this column into the following 3 main functionality groupings:
 
 -   Functional:
@@ -206,6 +208,8 @@ We shall group the various values observed in this column into the following 3 m
 freq(data = nigeria_wp, input = "#water_tech_category")
 ```
 
+![](water_tech%20eda.png)
+
 The largest 2 proportions of water technologies observed are Hand Pump (62%) and Mechanized Pump (27%). We shall focus on these 2 technologies for the subsequent clustering analysis.
 
 #### *#water_source_category* column
@@ -215,6 +219,8 @@ The largest 2 proportions of water technologies observed are Hand Pump (62%) and
 freq(data = nigeria_wp, input = "#water_source_category")
 ```
 
+![](water_source%20eda.png)
+
 Wells form the overwhelming water source at 96%. This may not be a meaningful or consequential clustering variable given its overly dominant prevalence. As such, this column will be dropped and not used for the subsequent clustering analysis.
 
 #### *is_urban* column
@@ -223,6 +229,8 @@ Wells form the overwhelming water source at 96%. This may not be a meaningful or
 #| eval: false
 freq(data = nigeria_wp, input = "is_urban")
 ```
+
+![](is_urban%20eda.png)
 
 The urban:rural ratio is roughly 20:80.
 
