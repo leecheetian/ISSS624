@@ -20,6 +20,7 @@ Here are Chee Tian's work for the ISSS624 Geospatial Analytics module:
     ii. [In-class Exercise 2](In-class_Ex/In-class_Ex2/in-class_ex2.qmd)
     iii. [In-class Exercise 3](In-class_Ex/In-class_Ex3/in-class_ex3.qmd)
     iv. [In-class Exercise 4](In-class_Ex/In-class_Ex4/in-class_ex4.qmd)
+    v.  [In-class Exercise 5](In-class_Ex/In-class_Ex5/in-class_ex5.qmd) :- [**Modeling the Spatial Variation of the Explanatory Factors of Water Point Status using Geographically Weighted Logistic Regression (GWLR)**](In-class_Ex/In-class_Ex5/in-class_ex5.qmd)
 
 3.  Take-home Exercises
 
