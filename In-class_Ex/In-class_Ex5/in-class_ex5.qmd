@@ -8,13 +8,13 @@ editor: visual
 
 ## Objective
 
--   To build an explanatory model to discover factor affecting water point status in Osun State, Nigeria
+-   To build an explanatory model to discover factors affecting water point status in Osun State, Nigeria
 
 -   Study area: Osun State
 
 -   Data sets:
 
-    -   Osun.rds, contains LGAs boundaries of State. It is in sf polygon data frame, and
+    -   Osun.rds, contains LGAs boundaries of Osun State. It is in sf polygon data frame, and
 
     -   Osun_wp_sf.rds, contains water points within Osun State. It is also in sf polygon data frame.
 
@@ -314,6 +314,21 @@ tm_shape(gwr_sf.fixed) +
 prob_T
 ```
 
+The following side-by-side charts show us how statistically significant the various variables' values influence the prediction of the water points' functionality status through t-tests and their t-values:
+
+##### Distance to tertiary road coefficient
+
+```{r}
+tertiary_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "distance_to_tertiary_road_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tertiary_SE
+```
+
 ```{r}
 tertiary_TV <- tm_shape(Osun) +
   tm_polygons(alpha = 0.1) +
@@ -322,5 +337,199 @@ tertiary_TV <- tm_shape(Osun) +
           border.col = "gray60",
           border.lwd = 1) +
   tm_view(set.zoom.limits = c(8, 14))
-tmap_arrange(prob_T, tertiary_TV, asp = 1, ncol = 2, sync = TRUE)
+tmap_arrange(tertiary_SE, tertiary_TV, asp = 1, ncol = 2, sync = TRUE)
 ```
+
+##### Distance to city coefficient
+
+```{r}
+city_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "distance_to_city_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+city_SE
+```
+
+```{r}
+city_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "distance_to_city_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(city_SE, city_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+##### Distance to town coefficient
+
+```{r}
+town_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "distance_to_town_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+town_SE
+```
+
+```{r}
+town_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "distance_to_town_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(town_SE, town_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+##### Urbanity coefficient
+
+```{r}
+isurban_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "is_urbanTRUE_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+isurban_SE
+```
+
+```{r}
+isurban_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "is_urbanTRUE_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(isurban_SE, isurban_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+##### Usage capacity coefficient
+
+```{r}
+usage_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "usage_capacity1000_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+usage_SE
+```
+
+```{r}
+usage_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "usage_capacity1000_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(usage_SE, usage_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+##### Well water source coefficient
+
+```{r}
+wellsrc_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "water_source_cleanProtected.Shallow.Well_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+wellsrc_SE
+```
+
+```{r}
+wellsrc_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "water_source_cleanProtected.Shallow.Well_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(wellsrc_SE, wellsrc_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+##### Spring water source coefficient
+
+```{r}
+springsrc_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "water_source_cleanProtected.Spring_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+springsrc_SE
+```
+
+```{r}
+springsrc_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "water_source_cleanProtected.Spring_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(springsrc_SE, springsrc_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+##### Water point population coefficient
+
+```{r}
+population_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "water_point_population_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+population_SE
+```
+
+```{r}
+population_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "water_point_population_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(population_SE, population_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+##### 1km local population coefficient
+
+```{r}
+population1km_SE <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "local_population_1km_SE",
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+population1km_SE
+```
+
+```{r}
+population1km_TV <- tm_shape(Osun) +
+  tm_polygons(alpha = 0.1) +
+  tm_shape(gwr_sf.fixed) +
+  tm_dots(col = "local_population_1km_TV", 
+          border.col = "gray60",
+          border.lwd = 1) +
+  tm_view(set.zoom.limits = c(8, 14))
+tmap_arrange(population1km_SE, population1km_TV, asp = 1, ncol = 2, sync = TRUE)
+```
+
+The above plots reveal that the various variables have various degrees of significance in inferring the functionality status of the respective water points across the Osun State.
